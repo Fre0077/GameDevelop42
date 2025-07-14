@@ -3,12 +3,19 @@
 #include "../include/utils.h"
 
 rendering::rendering() {
-    // Costruttore
+    lastX = 400.0f;
+	lastY = 300.0f;
+	rotX = 0.0f;
+	rotY = 0.0f;
+	firstMouse = true;
+	leftMousePressed = false;
+
+	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+	cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
+	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 }
 
-rendering::~rendering() {
-    // Distruttore
-}
+rendering::~rendering() {}
 
 void rendering::renderTriangles(const std::vector<std::vector<float>>& triangles, GLuint shaderProgram) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

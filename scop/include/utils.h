@@ -23,6 +23,7 @@ struct Vertex {
 };
 
 std::vector<std::vector<float>> readObjectFile (std::string filename);
+std::vector<int> readFace(const std::string& str);
 GLFWwindow* initOpenGL();
 GLuint loadShaders(const char* vertex_file_path, const char* fragment_file_path);
 void setupMouseControl(GLFWwindow* window, rendering* render);

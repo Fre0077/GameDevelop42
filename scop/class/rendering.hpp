@@ -13,14 +13,13 @@ class mat4;
 
 class rendering {
 	private:
-		float lastX = 400.0f, lastY = 300.0f;
-		float rotX = 0.0f, rotY = 0.0f;
-		bool firstMouse = true;
-		bool leftMousePressed = false;
-
-		glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-		glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
-		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		float lastX, lastY;
+		float rotX , rotY ;
+		bool firstMouse;
+		bool leftMousePressed;
+		glm::vec3 cameraPos;
+		glm::vec3 cameraTarget;
+		glm::vec3 cameraUp;
 	public:
 		rendering();
 		~rendering();

@@ -2,42 +2,71 @@
 #include "../class/mat4.hpp"
 #include "../class/rendering.hpp"
 
+//split
+std::vector<int> readFace(const std::string& str) {
+	std::vector<int> result;
+	std::stringstream ss(str);
+	std::string token;
+	
+	ss >> token;
+	while (ss >> token) {
+		int value = std::stoi(token);
+		result.push_back(value - 1);
+	}
+	return result;
+}
+
+void	pushTriangle(std::vector<float> *triangol, const Vertex& v) {
+	triangol->push_back(v.x);
+	triangol->push_back(v.y);
+	triangol->push_back(v.z);
+	triangol->push_back(v.r);
+	triangol->push_back(v.g);
+	triangol->push_back(v.b);
+}
+
 // Legge .obj restituendo un vector di vector di lfoat da usare per il VBO
 std::vector<std::vector<float>> readObjectFile (std::string filename) {
 	std::vector<std::vector<float>> triangols;
 	std::ifstream file(filename);
 
-	if (!file) {
-		throw std::runtime_error("Cannot open file: " + filename);
-	}
+	if (!file) throw std::runtime_error("Cannot open file: " + filename);
 	
 	std::string line;
+	std::string dummy;
 	std::vector<Vertex> vertices;
 	while (std::getline(file, line)) {
-		if (line.empty() || line[0] == '#' || line[0] != 'v') continue;
-		std::istringstream iss(line);
-		Vertex vertex;
-		std::string dummy;
-		
-		if (iss >> dummy >> vertex.x >> vertex.y >> vertex.z >> vertex.r >> vertex.g >> vertex.b)
-			vertices.push_back(vertex);
+		if (line[0] == 'v') {
+			std::istringstream iss(line);
+			Vertex vertex;
 
-		if (vertices.size() == 3) {
-			std::vector<float> triangol;
-			for (int i = 0; i < 3; i++) {
-				const Vertex& v = vertices[i];
-				triangol.push_back(v.x);
-				triangol.push_back(v.y);
-				triangol.push_back(v.z);
-				triangol.push_back(v.r);
-				triangol.push_back(v.g);
-				triangol.push_back(v.b);
+			if (vertices.size() % 2 == 0) {
+				vertex.r = 0.9;
+				vertex.g = 0.9;
+				vertex.b = 0.8;
+			} else {
+				vertex.r = 0.4;
+				vertex.g = 0.4;
+				vertex.b = 0.4;
 			}
-			triangols.push_back(triangol);
-			vertices.clear();
+			if (iss >> dummy >> vertex.x >> vertex.y >> vertex.z)
+				vertices.push_back(vertex);
+		} else if (line[0] == 'f') {
+			std::vector<int> seg = readFace(line);
+			if (seg.size() == 4){
+				std::vector<float> triangle2;
+				pushTriangle(&triangle2, vertices[seg[0]]);
+				pushTriangle(&triangle2, vertices[seg[2]]);
+				pushTriangle(&triangle2, vertices[seg[3]]);
+				triangols.push_back(triangle2);
+			}
+			std::vector<float> triangle;
+			pushTriangle(&triangle, vertices[seg[0]]);
+			pushTriangle(&triangle, vertices[seg[1]]);
+			pushTriangle(&triangle, vertices[seg[2]]);
+			triangols.push_back(triangle);
 		}
 	}
-
 	return triangols;
 }
 

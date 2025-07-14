@@ -59,8 +59,7 @@ mat4	mat4::multiply(const mat4& other) const {
 	mat4 result;
 	for (int i = 0; i < 16; i++)
 		result.data[i] = 0.0f;
-	
-	// Matrix multiplication (column-major order)
+
 	for (int row = 0; row < 4; row++) {
 		for (int col = 0; col < 4; col++) {
 			for (int k = 0; k < 4; k++) {
