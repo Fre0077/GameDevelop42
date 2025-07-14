@@ -1,8 +1,8 @@
-#ifndef MAT4
-	#define MAT4
+#ifndef MAT4_HPP
+#define MAT4_HPP
 
-	#include <string>
-	#include <cmath>
+#include <cmath>
+#include <string>
 
 class mat4 {
 	public:

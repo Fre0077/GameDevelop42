@@ -1,4 +1,5 @@
 #include "../include/utils.h"
+#include "../class/rendering.hpp"
 
 int main (int ac, char** av) {
 	if (ac != 2)
@@ -9,7 +10,8 @@ int main (int ac, char** av) {
 
 		GLFWwindow* window = initOpenGL();
 
-		setupMouseControl(window);
+		rendering render;
+		setupMouseControl(window, &render);
 
 		GLuint shaderProgram = loadShaders("shader/vertex.glsl", "shader/fragment.glsl");
 
@@ -18,7 +20,7 @@ int main (int ac, char** av) {
 			processInput(window);
 			
 			// Renderizza la scena
-            renderTriangles(triangles, shaderProgram);
+            render.renderTriangles(triangles, shaderProgram);
             
             glfwSwapBuffers(window);
             glfwPollEvents();
