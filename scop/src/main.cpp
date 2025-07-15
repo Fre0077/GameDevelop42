@@ -6,7 +6,7 @@ int main (int ac, char** av) {
 		return -1;
 	try {
 		std::string filename(av[1]);
-		std::vector<std::vector<float>> triangles = readObjectFile(filename);
+		std::vector<float> triangles = readObjectFile(filename);
 
 		GLFWwindow* window = initOpenGL();
 

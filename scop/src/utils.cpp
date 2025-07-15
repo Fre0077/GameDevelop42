@@ -25,9 +25,9 @@ void	pushTriangle(std::vector<float> *triangol, const Vertex& v) {
 	triangol->push_back(v.b);
 }
 
-// Legge .obj restituendo un vector di vector di lfoat da usare per il VBO
-std::vector<std::vector<float>> readObjectFile (std::string filename) {
-	std::vector<std::vector<float>> triangols;
+// Legge .obj restituendo un vector di vector di float da usare per il VBO
+std::vector<float> readObjectFile (std::string filename) {
+	std::vector<float> triangols;
 	std::ifstream file(filename);
 
 	if (!file) throw std::runtime_error("Cannot open file: " + filename);
@@ -54,17 +54,13 @@ std::vector<std::vector<float>> readObjectFile (std::string filename) {
 		} else if (line[0] == 'f') {
 			std::vector<int> seg = readFace(line);
 			if (seg.size() == 4){
-				std::vector<float> triangle2;
-				pushTriangle(&triangle2, vertices[seg[0]]);
-				pushTriangle(&triangle2, vertices[seg[2]]);
-				pushTriangle(&triangle2, vertices[seg[3]]);
-				triangols.push_back(triangle2);
+				pushTriangle(&triangols, vertices[seg[0]]);
+				pushTriangle(&triangols, vertices[seg[2]]);
+				pushTriangle(&triangols, vertices[seg[3]]);
 			}
-			std::vector<float> triangle;
-			pushTriangle(&triangle, vertices[seg[0]]);
-			pushTriangle(&triangle, vertices[seg[1]]);
-			pushTriangle(&triangle, vertices[seg[2]]);
-			triangols.push_back(triangle);
+			pushTriangle(&triangols, vertices[seg[0]]);
+			pushTriangle(&triangols, vertices[seg[1]]);
+			pushTriangle(&triangols, vertices[seg[2]]);
 		}
 	}
 	return triangols;

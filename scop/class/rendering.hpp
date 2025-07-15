@@ -20,10 +20,11 @@ class rendering {
 		glm::vec3 cameraPos;
 		glm::vec3 cameraTarget;
 		glm::vec3 cameraUp;
+		GLuint VAO, VBO;
 	public:
 		rendering();
 		~rendering();
-		void renderTriangles(const std::vector<std::vector<float>>& triangles, GLuint shaderProgram);
+		void renderTriangles(const std::vector<float>& triangles, GLuint shaderProgram);
 		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 		void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);

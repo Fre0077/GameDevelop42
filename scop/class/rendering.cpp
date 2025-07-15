@@ -13,11 +13,19 @@ rendering::rendering() {
 	cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 	cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
 }
 
-rendering::~rendering() {}
+rendering::~rendering() {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+}
 
-void rendering::renderTriangles(const std::vector<std::vector<float>>& triangles, GLuint shaderProgram) {
+void rendering::renderTriangles(const std::vector<float>& triangles, GLuint shaderProgram) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glUseProgram(shaderProgram);
 
@@ -36,27 +44,17 @@ void rendering::renderTriangles(const std::vector<std::vector<float>>& triangles
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.data);
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
 
-    for (const auto& triangle : triangles) {
-        GLuint VAO, VBO;
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
 
-        glBindVertexArray(VAO);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, triangle.size() * sizeof(float), triangle.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-        glEnableVertexAttribArray(1);
-
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-    }
+	int vertexCount = triangles.size() / 6;
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 }
 
 void rendering::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
