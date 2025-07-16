@@ -16,51 +16,58 @@ std::vector<int> readFace(const std::string& str) {
 	return result;
 }
 
-void	pushTriangle(std::vector<float> *triangol, const Vertex& v) {
+void	pushTriangle(std::vector<float> *triangol, const Vertex& v, bool color) {
 	triangol->push_back(v.x);
 	triangol->push_back(v.y);
 	triangol->push_back(v.z);
-	triangol->push_back(v.r);
-	triangol->push_back(v.g);
-	triangol->push_back(v.b);
+	if (color) {
+		triangol->push_back(0.9);
+		triangol->push_back(0.9);
+		triangol->push_back(0.8);
+	} else {
+		triangol->push_back(0.4);
+		triangol->push_back(0.4);
+		triangol->push_back(0.4);
+	}
+	triangol->push_back(v.u);
+	triangol->push_back(v.v);
 }
 
 // Legge .obj restituendo un vector di vector di float da usare per il VBO
 std::vector<float> readObjectFile (std::string filename) {
-	std::vector<float> triangols;
-	std::ifstream file(filename);
+	std::vector<float>	triangols;
+	std::ifstream		file(filename);
 
 	if (!file) throw std::runtime_error("Cannot open file: " + filename);
 	
-	std::string line;
-	std::string dummy;
-	std::vector<Vertex> vertices;
+	bool				color;
+	std::string 		line;
+	std::string 		dummy;
+	std::vector<Vertex>	vertices;
 	while (std::getline(file, line)) {
 		if (line[0] == 'v') {
 			std::istringstream iss(line);
 			Vertex vertex;
 
-			if (vertices.size() % 2 == 0) {
-				vertex.r = 0.9;
-				vertex.g = 0.9;
-				vertex.b = 0.8;
-			} else {
-				vertex.r = 0.4;
-				vertex.g = 0.4;
-				vertex.b = 0.4;
-			}
-			if (iss >> dummy >> vertex.x >> vertex.y >> vertex.z)
+			if (iss >> dummy >> vertex.x >> vertex.y >> vertex.z) {
+				vertex.u = (vertex.x + 1.0f) * 0.5f;
+				vertex.v = (vertex.y + 1.0f) * 0.5f;
 				vertices.push_back(vertex);
+			}
 		} else if (line[0] == 'f') {
+			if (color)
+				color = false;
+			else
+				color = true;
 			std::vector<int> seg = readFace(line);
 			if (seg.size() == 4){
-				pushTriangle(&triangols, vertices[seg[0]]);
-				pushTriangle(&triangols, vertices[seg[2]]);
-				pushTriangle(&triangols, vertices[seg[3]]);
+				pushTriangle(&triangols, vertices[seg[0]], color);
+				pushTriangle(&triangols, vertices[seg[2]], color);
+				pushTriangle(&triangols, vertices[seg[3]], color);
 			}
-			pushTriangle(&triangols, vertices[seg[0]]);
-			pushTriangle(&triangols, vertices[seg[1]]);
-			pushTriangle(&triangols, vertices[seg[2]]);
+			pushTriangle(&triangols, vertices[seg[0]], color);
+			pushTriangle(&triangols, vertices[seg[1]], color);
+			pushTriangle(&triangols, vertices[seg[2]], color);
 		}
 	}
 	return triangols;
@@ -77,7 +84,7 @@ GLFWwindow* initOpenGL() {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_DEPTH_BITS, 24);
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "SCOP - Triangle Renderer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(1440, 800, "SCOP - Triangle Renderer", NULL, NULL);
 	if (!window) {
 		glfwTerminate();
 		throw std::runtime_error("Failed to create GLFW window");
@@ -181,7 +188,17 @@ void setupMouseControl(GLFWwindow* window, rendering* render) {
 }
 
 //setta funzionalità dei tasti
-void processInput(GLFWwindow* window) {
+void processInput(GLFWwindow* window, rendering* render) {
+	static bool tPressed = false;
+	
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && !tPressed) {
+		render->useTexture();
+		tPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_RELEASE) {
+		tPressed = false;
+	}
 }

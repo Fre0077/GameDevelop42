@@ -7,8 +7,26 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include "../include/utils.h"
 
-// Forward declaration
+struct BMPHeader {
+    char signature[2];
+    uint32_t fileSize;
+    uint32_t reserved;
+    uint32_t dataOffset;
+    uint32_t headerSize;
+    uint32_t width;
+    uint32_t height;
+    uint16_t planes;
+    uint16_t bitsPerPixel;
+    uint32_t compression;
+    uint32_t imageSize;
+    uint32_t xResolution;
+    uint32_t yResolution;
+    uint32_t colorsUsed;
+    uint32_t colorsImportant;
+};
+
 class mat4;
 
 class rendering {
@@ -21,10 +39,18 @@ class rendering {
 		glm::vec3 cameraTarget;
 		glm::vec3 cameraUp;
 		GLuint VAO, VBO;
+		GLuint texture;
+		GLuint shaderProgram;
+		GLuint whiteTexture;
+		bool textureLoaded;
+		bool textureOn;
 	public:
-		rendering();
+		rendering(GLuint shaderProgram);
 		~rendering();
-		void renderTriangles(const std::vector<float>& triangles, GLuint shaderProgram);
+		bool loadTexture(const std::string& texturePath);
+		void createDefaultTexture();
+		void useTexture();
+		void renderTriangles(const std::vector<float>& triangles);
 		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 		void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);

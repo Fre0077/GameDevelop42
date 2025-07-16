@@ -12,14 +12,14 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <cstdint>
 
-// Forward declarations
 class mat4;
 class rendering;
 
 struct Vertex {
-    float x, y, z;
-    float r, g, b;
+	float x, y, z;
+	float u, v;
 };
 
 std::vector<float> readObjectFile (std::string filename);
@@ -27,6 +27,6 @@ std::vector<int> readFace(const std::string& str);
 GLFWwindow* initOpenGL();
 GLuint loadShaders(const char* vertex_file_path, const char* fragment_file_path);
 void setupMouseControl(GLFWwindow* window, rendering* render);
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window, rendering* render);
 
 #endif
