@@ -58,6 +58,14 @@ void rendering::renderTriangles(const std::vector<float>& triangles) {
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.data);
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
 
+	glActiveTexture(GL_TEXTURE0);
+	if (textureOn && textureLoaded) {
+		glBindTexture(GL_TEXTURE_2D, texture);
+	} else {
+		glBindTexture(GL_TEXTURE_2D, whiteTexture);
+	}
+	glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
+
 	glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -76,11 +84,6 @@ void rendering::renderTriangles(const std::vector<float>& triangles) {
 void rendering::useTexture() {
 	textureOn = !textureOn;
 	glUniform1i(glGetUniformLocation(shaderProgram, "useTexture"), textureOn && textureLoaded);
-	if (textureOn && textureLoaded) {
-		glBindTexture(GL_TEXTURE_2D, texture);
-	} else {
-		glBindTexture(GL_TEXTURE_2D, whiteTexture);
-	}
 }
 
 void rendering::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -150,11 +153,13 @@ unsigned char* readBMP(const std::string& filename, int& width, int& height) {
 	file.read(signature, 2);
 	if (!file) {
 		std::cout << "Error reading file signature" << std::endl;
+		file.close();
 		return nullptr;
 	}
 
 	if (signature[0] != 'B' || signature[1] != 'M') {
 		std::cout << "Not a valid BMP file - signature mismatch" << std::endl;
+		file.close();
 		return nullptr;
 	}
 
@@ -165,11 +170,13 @@ unsigned char* readBMP(const std::string& filename, int& width, int& height) {
 	file.read(reinterpret_cast<char*>(&header.fileSize), sizeof(BMPHeader) - 2);
 	if (!file) {
 		std::cout << "Error reading BMP header" << std::endl;
+		file.close();
 		return nullptr;
 	}
 
 	if (header.bitsPerPixel != 24 || header.compression != 0) {
 		std::cout << "Only 24-bit uncompressed BMP supported" << std::endl;
+		file.close();
 		return nullptr;
 	}
 
@@ -184,6 +191,7 @@ unsigned char* readBMP(const std::string& filename, int& width, int& height) {
 	if (!file) {
 		std::cout << "Error seeking to data offset" << std::endl;
 		delete[] imageData;
+		file.close();
 		return nullptr;
 	}
 
@@ -194,6 +202,7 @@ unsigned char* readBMP(const std::string& filename, int& width, int& height) {
 			if (!file) {
 				std::cout << "Error reading pixel data at row " << y << ", col " << x << std::endl;
 				delete[] imageData;
+				file.close();
 				return nullptr;
 			}
 			int index = (y * width + x) * 3;
@@ -220,8 +229,6 @@ bool rendering::loadTexture(const std::string& texturePath) {
 	unsigned char* data = readBMP(texturePath, width, height);
 	
 	if (data) {
-		glActiveTexture(GL_TEXTURE0);
-		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		delete[] data;

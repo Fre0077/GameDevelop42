@@ -1,0 +1,253 @@
+# Valgrind suppression file per OpenGL/GLFW/GLEW
+# Uso: valgrind --suppressions=suppresion.supp ./scop model.obj
+
+#==============================================================================
+# NVIDIA Driver Suppressions
+#==============================================================================
+
+{
+   nvidia_driver_conditional_jump
+   Memcheck:Cond
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   nvidia_driver_uninitialized_value
+   Memcheck:Value8
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   nvidia_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:*/libnvidia-glcore.so*
+}
+
+{
+   nvidia_tls_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:*/libnvidia-tls.so*
+}
+
+#==============================================================================
+# Mesa/Intel Driver Suppressions
+#==============================================================================
+
+{
+   mesa_driver_conditional_jump
+   Memcheck:Cond
+   obj:*/libmesa*.so*
+}
+
+{
+   mesa_driver_uninitialized_value
+   Memcheck:Value8
+   obj:*/libmesa*.so*
+}
+
+{
+   mesa_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:*/libmesa*.so*
+}
+
+{
+   intel_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:*/i965_dri.so*
+}
+
+{
+   iris_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:*/iris_dri.so*
+}
+
+#==============================================================================
+# GLFW Suppressions
+#==============================================================================
+
+{
+   glfw_init_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   ...
+   fun:glfwInit
+}
+
+{
+   glfw_window_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   ...
+   fun:glfwCreateWindow
+}
+
+{
+   glfw_context_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   ...
+   fun:glfwMakeContextCurrent
+}
+
+{
+   glfw_terminate_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   ...
+   fun:glfwTerminate
+}
+
+#==============================================================================
+# OpenGL Core Suppressions
+#==============================================================================
+
+{
+   opengl_context_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libGL.so*
+}
+
+{
+   opengl_egl_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libEGL.so*
+}
+
+{
+   opengl_gbm_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libgbm.so*
+}
+
+#==============================================================================
+# GLEW Suppressions
+#==============================================================================
+
+{
+   glew_init_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   ...
+   fun:glewInit
+}
+
+{
+   glew_extension_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libGLEW.so*
+}
+
+#==============================================================================
+# X11/Wayland Display System Suppressions
+#==============================================================================
+
+{
+   x11_connection_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libX11.so*
+}
+
+{
+   x11_xcb_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libX11-xcb.so*
+}
+
+{
+   xcb_connection_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libxcb.so*
+}
+
+{
+   wayland_display_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libwayland-client.so*
+}
+
+{
+   drm_device_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libdrm.so*
+}
+
+#==============================================================================
+# GPU Driver Thread Suppressions
+#==============================================================================
+
+{
+   gpu_driver_thread_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   fun:*pthread*
+   obj:*/lib*gl*
+}
+
+{
+   gpu_driver_cond_jump
+   Memcheck:Cond
+   obj:*/lib*gl*
+}
+
+{
+   gpu_driver_value8
+   Memcheck:Value8
+   obj:*/lib*gl*
+}
+
+#==============================================================================
+# DRI/DRM Driver Suppressions
+#==============================================================================
+
+{
+   dri_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/*_dri.so*
+}
+
+{
+   dri_driver_cond
+   Memcheck:Cond
+   obj:*/*_dri.so*
+}
+
+{
+   drm_driver_leak
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:*alloc*
+   obj:*/libdrm_*.so*
+}

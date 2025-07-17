@@ -16,6 +16,8 @@ fclean: clean
 
 re: fclean $(TARGET)
 
-.PHONY: clean fclean re
+val: $(TARGET)
+	valgrind --suppressions=suppressions.supp --error-limit=no --leak-check=full --show-leak-kinds=all --track-origins=yes --log-file=valgrind.log ./$(TARGET) $(ARGS)
 
-.PHONY: all clean fclean re
+.PHONY: clean fclean re val
+
