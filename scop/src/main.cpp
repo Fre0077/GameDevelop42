@@ -23,6 +23,8 @@ int main (int ac, char** av) {
 		
 		setupMouseControl(window, render);
 
+		render->centerObj(triangles);
+
 		while (!glfwWindowShouldClose(window)) {
 			processInput(window, render);
 

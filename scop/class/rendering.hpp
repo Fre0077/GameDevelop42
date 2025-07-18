@@ -31,29 +31,35 @@ class mat4;
 
 class rendering {
 	private:
+		float startSmooth;
+		float textureSmooth;
+		float rotX , rotY;
 		float lastX, lastY;
-		float rotX , rotY ;
 		bool firstMouse;
+		bool witchSmooth;
+		bool textureLoaded;
 		bool leftMousePressed;
+		glm::vec3 cameraUp;
 		glm::vec3 cameraPos;
 		glm::vec3 cameraTarget;
-		glm::vec3 cameraUp;
-		GLuint VAO, VBO;
 		GLuint texture;
-		GLuint shaderProgram;
+		GLuint VAO, VBO;
 		GLuint whiteTexture;
-		bool textureLoaded;
-		bool textureOn;
+		GLuint shaderProgram;
 	public:
-		rendering(GLuint shaderProgram);
 		~rendering();
-		bool loadTexture(const std::string& texturePath);
-		void createDefaultTexture();
-		void useTexture();
-		void renderTriangles(const std::vector<float>& triangles);
-		void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-		void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+		rendering(GLuint shaderProgram);
+
+		bool	loadTexture(const std::string& texturePath);
+
+		void	useTexture();
+		void	smoothCriminal();
+		void	createDefaultTexture();
+		void	centerObj(std::vector<float>& triangles);
+		void	renderTriangles(const std::vector<float>& triangles);
+		void	mouse_callback(GLFWwindow* window, double xpos, double ypos);
+		void	scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+		void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 };
 
 #endif

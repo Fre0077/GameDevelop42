@@ -2,16 +2,18 @@
 #include "mat4.hpp"
 
 rendering::rendering(GLuint shaderProgram) {
+	startSmooth = 0.0f;
     lastX = 400.0f;
 	lastY = 300.0f;
 	rotX = 0.0f;
 	rotY = 0.0f;
+	textureSmooth = false;
 	firstMouse = true;
-	leftMousePressed = false;
+	witchSmooth = false;
 	textureLoaded = false;
-	textureOn = false;
+	leftMousePressed = false;
 
-	cameraPos = glm::vec3(0.0f, 1.0f, 8.0f);
+	cameraPos = glm::vec3(0.0f, 0.0f, 8.0f);
 	cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
@@ -49,6 +51,7 @@ void rendering::renderTriangles(const std::vector<float>& triangles) {
 	mat4 projection;
 	projection.project(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
 
+	
 	mat4 rotY, rotX;
 	rotY.world("y", this->rotY);
 	rotX.world("x", this->rotX);
@@ -59,11 +62,12 @@ void rendering::renderTriangles(const std::vector<float>& triangles) {
 	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
 
 	glActiveTexture(GL_TEXTURE0);
-	if (textureOn && textureLoaded) {
+	if (textureSmooth && textureLoaded) {
 		glBindTexture(GL_TEXTURE_2D, texture);
 	} else {
 		glBindTexture(GL_TEXTURE_2D, whiteTexture);
 	}
+	smoothCriminal();
 	glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 
 	glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
@@ -82,8 +86,10 @@ void rendering::renderTriangles(const std::vector<float>& triangles) {
 }
 
 void rendering::useTexture() {
-	textureOn = !textureOn;
-	glUniform1i(glGetUniformLocation(shaderProgram, "useTexture"), textureOn && textureLoaded);
+	if (textureLoaded) {
+		startSmooth = glfwGetTime();
+		witchSmooth = !witchSmooth;
+	}
 }
 
 void rendering::mouse_callback(GLFWwindow* window, double xpos, double ypos) {
@@ -141,6 +147,25 @@ void rendering::scroll_callback(GLFWwindow* window, double xoffset, double yoffs
 //================
 //Support function
 //================
+
+void	rendering::smoothCriminal() {
+	if (startSmooth == 0 || glfwGetTime() - startSmooth > 1.5f) {
+		if (witchSmooth) 
+			glUniform1f(glGetUniformLocation(shaderProgram, "useTexture"), 1);
+		else
+			glUniform1f(glGetUniformLocation(shaderProgram, "useTexture"), 0);
+		return ;
+	}
+	if (witchSmooth) {
+		textureSmooth = (glfwGetTime() - startSmooth) / 1.5f;
+		glUniform1f(glGetUniformLocation(shaderProgram, "useTexture"), textureSmooth);
+	} else if (!witchSmooth) {
+		textureSmooth = 1 - ((glfwGetTime() - startSmooth) / 1.5f);
+		glUniform1f(glGetUniformLocation(shaderProgram, "useTexture"), textureSmooth);
+	} else {
+		startSmooth = 0.0f;
+	}
+}
 
 unsigned char* readBMP(const std::string& filename, int& width, int& height) {
 	std::ifstream file(filename, std::ios::binary);
@@ -238,4 +263,29 @@ bool rendering::loadTexture(const std::string& texturePath) {
 	}
 	std::cout << "Failed to load BMP texture: " << texturePath << std::endl;
 	return false;
+}
+
+void	rendering::centerObj(std::vector<float> &triangles) {
+	float minX = triangles[0], maxX = triangles[0];
+	float minY = triangles[1], maxY = triangles[1];
+	float minZ = triangles[2], maxZ = triangles[2];
+
+	for (size_t i = 0; i < triangles.size(); i += 8) {
+		float x = triangles[i];
+		float y = triangles[i + 1];
+		float z = triangles[i + 2];
+		
+		minX = std::min(minX, x);
+		maxX = std::max(maxX, x);
+		minY = std::min(minY, y);
+		maxY = std::max(maxY, y);
+		minZ = std::min(minZ, z);
+		maxZ = std::max(maxZ, z);
+	}
+
+	for (size_t i = 0; i < triangles.size(); i += 8) {
+		triangles[i] -= (minX + maxX) / 2.0f;
+		triangles[i + 1] -= (minY + maxY) / 2.0f;
+		triangles[i + 2] -= (minZ + maxZ) / 2.0f;
+	}
 }

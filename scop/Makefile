@@ -3,7 +3,10 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++17
 
 LIBS = -lglfw -lGL -lGLEW -lm
 
-SOURCES = ./src/main.cpp ./src/utils.cpp ./class/mat4.cpp ./class/rendering.cpp
+SOURCES =	./src/main.cpp \
+			./src/utils.cpp \
+			./class/mat4.cpp \
+			./class/rendering.cpp
 TARGET = scop
 
 $(TARGET): $(SOURCES)
