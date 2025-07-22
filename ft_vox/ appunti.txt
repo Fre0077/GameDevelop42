@@ -1,0 +1,16 @@
+STRUTTURA PER IL SALVATAGGIO DEL MONDO:
+-Voxel:	Punti singoli che rappresentano un blocco, possizionati in un angolo basso del blocco. Contengono dati per le texture, per la
+		trasparenza. Conterano anche dati per la visibilità per la faccia di un blocco(dati salvati bit a bit con un char).
+
+CONTROLLI PER I BLOCCHI: (mano mano i ve)
+-FOV check:			Controllo per la direzione della visuale per player.
+-Directional:		Controlla quale delle 6 facce sono possibilmente visibili a parte dalla posizione del giocatore.
+-Face check:		Controllo dei blocchi adiacenti per capire se una faccia è visibile.
+-Ray_casting:		Controllo per la visibilità di un blocco(3 raggi ai vertici dei un blocco).
+-*Tramutazione da voxel in vertex per OpenGL*
+-*Bynda le texture*
+-Greedy meshing:	Unione di triangoli per blocchi allineati(modifica degli U V per le texture).
+-*Conversione coordinate per OpenGL*
+
+TEXTURE:
+-bynda le texture giuste ai voxel in base alla posizione, impostando gli uv per le facce da stampare
