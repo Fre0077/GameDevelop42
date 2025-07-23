@@ -1,11 +1,10 @@
 ft_vox/.vscode
 ft_vox/ft_vox
 ft_vox/valgrind.log
-
+ft_vox/worlds
 
 scop/.vscode
 scop/scop
 scop/valgrind.log
-
 
 .vscode

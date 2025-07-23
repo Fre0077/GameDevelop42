@@ -17,4 +17,3 @@ class mat4 {
 		mat4	multiply(const mat4& other) const;
 };
 
-#endif

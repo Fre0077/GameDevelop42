@@ -1,7 +1,5 @@
-#ifndef VOXEL_HPP
-# define VOXEL_HPP
+#pragma once
 
-# include "../headers/inlcusion.h"
 # include "../headers/struct.h"
 # include "EightBool.hpp"
 
@@ -25,5 +23,3 @@ public:
 	Vertex	GetVoxel();
 	int		GetTexture();
 };
-
-#endif

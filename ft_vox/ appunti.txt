@@ -9,7 +9,7 @@ CONTROLLI PER I BLOCCHI: (mano mano i ve)
 -Ray_casting:		Controllo per la visibilità di un blocco(3 raggi ai vertici dei un blocco).
 -*Tramutazione da voxel in vertex per OpenGL*
 -*Bynda le texture*
--Greedy meshing:	Unione di triangoli per blocchi allineati(modifica degli U V per le texture).
+-Greedy meshing:	Unione di triangoli per blocchi allineati(modifica degli U V per le texture). (FORSE!!!!)
 -*Conversione coordinate per OpenGL*
 
 TEXTURE:

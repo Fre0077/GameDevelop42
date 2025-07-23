@@ -1,7 +1,6 @@
-#ifndef EIGHTBOOL_HPP
-# define EIGHTBOOL_HPP
+#pragma once
 
-# include "../headers/inlcusion.h"
+# include "../headers/inclusion.h"
 
 class EightBool {
 private:
@@ -21,5 +20,3 @@ public:
 	//	}
 	//};
 };
-
-#endif
