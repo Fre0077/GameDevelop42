@@ -6,7 +6,7 @@ CONTROLLI PER I BLOCCHI: (mano mano i ve)
 -FOV check:			Controllo per la direzione della visuale per player.
 -Directional:		Controlla quale delle 6 facce sono possibilmente visibili a parte dalla posizione del giocatore.
 -Face check:		Controllo dei blocchi adiacenti per capire se una faccia è visibile.
--Ray_casting:		Controllo per la visibilità di un blocco(3 raggi ai vertici dei un blocco).
+-Ray_casting:		Controllo per la visibilità di un blocco(3 raggi ai vertici dei un blocco). (FORSE!!!!)
 -*Tramutazione da voxel in vertex per OpenGL*
 -*Bynda le texture*
 -Greedy meshing:	Unione di triangoli per blocchi allineati(modifica degli U V per le texture). (FORSE!!!!)
@@ -14,3 +14,9 @@ CONTROLLI PER I BLOCCHI: (mano mano i ve)
 
 TEXTURE:
 -bynda le texture giuste ai voxel in base alla posizione, impostando gli uv per le facce da stampare
+
+SALVATAGGIO:
+-seed salvato in file separato.
+-salvataggio del modno in file separati, idvisi in regioni da 32x32 chunck.
+-per chunck, salvataggio di ogni voxel. sia fisico che non.
+-per il voxel. salvataggio della posizione e del tipo di blocco che è.

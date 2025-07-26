@@ -4,7 +4,7 @@
 
 class EightBool {
 private:
-	char	boolStore;
+	uint8_t	boolStore;
 public:
 	EightBool();
 	~EightBool();
@@ -12,6 +12,7 @@ public:
 	void	SetBool(uint8_t n);
 
 	uint8_t	GetBool(uint8_t n);
+	uint8_t	GetValue();
 
 	//class Overflow : public std::exception {
 	//public:

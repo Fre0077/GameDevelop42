@@ -1,6 +1,6 @@
 NAME = ft_vox
 CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++17
+CXXFLAGS = -Wall -Wextra -Werror -std=c++23
 
 LIBS = -lglfw -lGL -lGLEW -lm
 

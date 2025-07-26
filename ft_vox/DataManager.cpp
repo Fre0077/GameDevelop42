@@ -36,18 +36,12 @@ std::string	DataManager::getSeed(std::string worldName) {
 
 
 bool	DataManager::checkSeed(std::string str) {
-	if (str.empty()) {
-		//std::cout << "cos1" << std::endl;
+	if (str.empty())
 		return false;
-	}
-	if (str.length() > 19) {
-		//std::cout << "cos2" << std::endl;
+	if (str.length() > 19)
 		return false;
-	}
 	for (char c : str)
-		if (!std::isdigit(c)) {
-			//std::cout << "cos3" << std::endl;
+		if (!std::isdigit(c))
 			return false;
-		}
 	return true;
 }

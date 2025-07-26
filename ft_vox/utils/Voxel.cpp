@@ -4,14 +4,15 @@ Voxel::Voxel(float x, float y, float z) {
 	voxel.x = x;
 	voxel.y = y;
 	voxel.z = z;
+	this->tex[0] = {0, 0};
+	this->tex[1] = {0, 0};
+	this->tex[2] = {0, 0};
+	this->tex[3] = {0, 0};
+	this->tex[4] = {0, 0};
+	this->tex[5] = {0, 0};
 }
 
 Voxel::~Voxel() {}
-
-
-void	Voxel::SetTexture(int input) {
-	texture = input;
-}
 
 void	Voxel::SetFace(uint8_t n) {
 	vis.SetBool(n);
@@ -22,17 +23,14 @@ void	Voxel::SetTrasparence() {
 }
 
 uint8_t	Voxel::GetTrasparence() {
-	return vis.GetBool(6);
+	if (vis.GetBool(6) || vis.GetValue() == 192)
+		return 1;
 }
 
 uint8_t	Voxel::GetFace(uint8_t n) {
 	return vis.GetBool(n);
 }
 
-Vertex	Voxel::GetVoxel() {
+Pos	Voxel::GetVoxel() {
 	return voxel;
-}
-
-int		Voxel::GetTexture() {
-	return texture;
 }

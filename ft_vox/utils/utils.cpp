@@ -8,14 +8,12 @@ void	printVec(const std::vector<float>& vec) {
 
 	const char* levels = " .:-=+*#%@";
 
-	for (int row = 15; row >= 0; row--) {
-		for (int col = 0; col < 16; col++) {
-			int index = col * 16 + row;
-			float val = vec[index];
-			val = (val + 1.0f) / 2.0f;
-			int level = std::min(9, std::max(0, static_cast<int>(val * 9)));
-			std::cout << levels[level] << " ";
-		}
-		std::cout << std::endl;
+	for (int i = 0; i < 256; i++) {
+		float val = vec[i];
+		val = (val + 1.0f) / 2.0f;
+		int level = std::min(9, std::max(0, static_cast<int>(val * 9)));
+		std::cout << levels[level] << " ";
+		if (i % 16 == 0)
+			std::cout << std::endl;
 	}
 }
