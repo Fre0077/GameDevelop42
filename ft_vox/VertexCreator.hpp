@@ -1,8 +1,5 @@
 #pragma once
 
-# include "headers/struct.h"
-# include "headers/utils.h"
-
 # include "Texture.hpp"
 class Texture;
 # include "utils/Voxel.hpp"

@@ -11,6 +11,7 @@
 # include <stdio.h>
 # include <cstdint>
 # include <fstream>
+# include <cstdint>
 # include <errno.h>
 # include <cstring>
 # include <cstdlib>
@@ -19,3 +20,19 @@
 # include <string>
 # include <cerrno>
 # include <cmath>
+
+# include "stb_image.h"
+
+void	printVec(const std::vector<float>& vec);
+
+struct Vertex {
+	float x, y, z, u, v;
+};
+
+struct Pos {
+	float x, y, z;
+};
+
+struct tex {
+	uint8_t u, v;
+};

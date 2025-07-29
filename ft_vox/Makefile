@@ -15,6 +15,16 @@ SOURCES =	./WorldGenerator.cpp \
 			./utils/utils.cpp \
 			./utils/Voxel.cpp
 
+STB_HEADER = headers/stb_image.h
+STB_URL = https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
+
+all: $(STB_HEADER) $(NAME)
+
+$(STB_HEADER):
+	@echo "File $(STB_HEADER) non trovato. Scaricando..."
+	wget -q $(STB_URL) -O $(STB_HEADER)
+	@echo "Download completato"
+
 $(NAME): $(SOURCES)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(SOURCES) $(LIBS)
 

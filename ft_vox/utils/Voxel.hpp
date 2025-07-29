@@ -1,6 +1,5 @@
 #pragma once
 
-# include "../headers/struct.h"
 # include "EightBool.hpp"
 
 class EightBool; // 0-5 vis blocco 6 trasparente 7 semi-trasparente

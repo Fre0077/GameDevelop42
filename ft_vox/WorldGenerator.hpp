@@ -1,8 +1,5 @@
 #pragma once
 
-# include "headers/struct.h"
-# include "headers/utils.h"
-
 # include "DataManager.hpp"
 class DataManager;
 # include "Texture.hpp"
