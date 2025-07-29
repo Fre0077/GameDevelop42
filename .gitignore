@@ -2,6 +2,7 @@ ft_vox/.vscode
 ft_vox/ft_vox
 ft_vox/valgrind.log
 ft_vox/worlds
+ft_vox/stb_image.h
 
 scop/.vscode
 scop/scop
