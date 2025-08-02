@@ -1,13 +1,24 @@
 #pragma once
 
 # include "headers/inclusion.h"
+# include "headers/stb_image.h"
+# include "utils/mat4.hpp"
+
+class mat4;
 
 class Rendering {
 private:
 	std::vector<float>	triangles;
-	unsigned int VAO, VBO;
-	GLFWwindow* window;
-	int	width, height;
+	unsigned int		VAO, VBO;
+	unsigned int		texture;
+	GLFWwindow*			window;
+	GLuint				shaderProgram;
+	float				lastX, lastY;
+	float				rotX, rotY;
+	bool				firstMouse;
+	int					texWidth, texHeight;
+	int					width, height;
+	Pos					camera;
 
 public:
 	Rendering(int width, int height);
@@ -16,6 +27,13 @@ public:
 	void	Init(std::string title);
 	void	Loop();
 	void	setTriangles(std::vector<float>	input);
+
+	void	loadShaders(const char* vertexPath, const char* fragmentPath);
+	void	loadTexture(const std::string& texturePath);
+
+	void	mouse_callback(double xpos, double ypos);
+	void	setupMouseControl();
+	void	processInput();
 
 	class ErrorWindow : public std::exception {
 	public:

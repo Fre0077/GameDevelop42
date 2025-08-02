@@ -10,7 +10,7 @@ private:
 	uint8_t		block;
 	Pos			voxel;
 public:
-	tex tex[6];
+	tex texture[6];
 	Voxel(float x, float y, float z);
 	~Voxel();
 
@@ -22,5 +22,7 @@ public:
 	Pos		GetVoxel();
 };
 
-// Per il tex: se contiene 1, allora ogni facica è uguale, se due è come un log, se no ci saranno tutte le faccie
+std::ostream& operator<<(std::ostream& out, Voxel &rhs);
+
+// Per il texture: se contiene 1, allora ogni facica è uguale, se due è come un log, se no ci saranno tutte le faccie
 

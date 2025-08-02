@@ -17,7 +17,7 @@ public:
 
 	std::vector<float>	getVertex();
 	void				directionCheck(float x, float y, float z);
-	void				setBlocks(std::vector<Voxel> input);
+	void				setBlocks(std::vector<Voxel> &input);
 	void				calculateTriangle();
 	void				airCheck();
 	//void				faceCheck();

@@ -10,10 +10,12 @@ SOURCES =	./WorldGenerator.cpp \
 			./Rendering.cpp \
 			./Texture.cpp \
 			./main.cpp \
+			./utils/stb_image_impl.cpp \
 			./utils/EightBool.cpp \
 			./utils/Vector.cpp \
 			./utils/utils.cpp \
-			./utils/Voxel.cpp
+			./utils/Voxel.cpp \
+			./utils/mat4.cpp
 
 STB_HEADER = headers/stb_image.h
 STB_URL = https://raw.githubusercontent.com/nothings/stb/master/stb_image.h

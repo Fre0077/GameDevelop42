@@ -16,6 +16,7 @@
 # include <cstring>
 # include <cstdlib>
 # include <sstream>
+# include <cstdint>
 # include <vector>
 # include <string>
 # include <cerrno>
@@ -25,10 +26,7 @@
 # include <GLFW/glfw3.h>
 # include <glm/glm.hpp>
 
-
 # include "stb_image.h"
-
-void	printVec(const std::vector<float>& vec);
 
 struct Vertex {
 	float x, y, z, u, v;
@@ -41,3 +39,7 @@ struct Pos {
 struct tex {
 	uint8_t u, v;
 };
+
+void	pushVertex(Vertex &ver, std::vector<float> &vec);
+void	printVecF(const std::vector<float>& vec);
+void	printVec(const std::vector<float>& vec);

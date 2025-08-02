@@ -17,3 +17,17 @@ void	printVec(const std::vector<float>& vec) {
 			std::cout << std::endl;
 	}
 }
+
+void	printVecF(const std::vector<float>& vec) {
+	for (size_t i = 0; i < vec.size(); i++) {
+		std::cout << vec[i] << " ";
+	}
+}
+
+void	pushVertex(Vertex &ver, std::vector<float> &vec) {
+	vec.push_back(ver.x);
+	vec.push_back(ver.y);
+	vec.push_back(ver.z);
+	vec.push_back(ver.u);
+	vec.push_back(ver.v);
+}

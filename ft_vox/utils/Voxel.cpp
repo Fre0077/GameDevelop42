@@ -4,12 +4,12 @@ Voxel::Voxel(float x, float y, float z) {
 	voxel.x = x;
 	voxel.y = y;
 	voxel.z = z;
-	this->tex[0] = {0, 0};
-	this->tex[1] = {0, 0};
-	this->tex[2] = {0, 0};
-	this->tex[3] = {0, 0};
-	this->tex[4] = {0, 0};
-	this->tex[5] = {0, 0};
+	this->texture[0] = {0, 0};
+	this->texture[1] = {0, 0};
+	this->texture[2] = {0, 0};
+	this->texture[3] = {0, 0};
+	this->texture[4] = {0, 0};
+	this->texture[5] = {0, 0};
 }
 
 Voxel::~Voxel() {}
@@ -25,6 +25,7 @@ void	Voxel::SetTrasparence() {
 uint8_t	Voxel::GetTrasparence() {
 	if (vis.GetBool(6) || vis.GetValue() == 192)
 		return 1;
+	return 0;
 }
 
 uint8_t	Voxel::GetFace(uint8_t n) {
@@ -33,4 +34,13 @@ uint8_t	Voxel::GetFace(uint8_t n) {
 
 Pos	Voxel::GetVoxel() {
 	return voxel;
+}
+
+std::ostream& operator<<(std::ostream& out, Voxel &rhs)
+{
+	if (rhs.GetTrasparence())
+		out << "o";
+	else
+		out << "i";
+	return out;
 }

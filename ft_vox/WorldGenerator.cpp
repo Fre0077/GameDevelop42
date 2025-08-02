@@ -83,7 +83,6 @@ std::vector<float> WorldGenerator::perlinNoise(long x, long y) {
 			ret.push_back(value);
 		}
 	}
-	printVec(ret);
 	return ret;
 }
 

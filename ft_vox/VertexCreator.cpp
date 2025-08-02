@@ -9,51 +9,56 @@ void	VertexCreator::calculateTriangle() {
 	long	size = blocks.size();
 	Pos		zero;
 
+	//std::cout << size << std::endl;
 	for (int i = 0; i < size; i++) {
 		zero = blocks[i].GetVoxel();
 		if (blocks[i].GetFace(0)) {
-			one = {zero.x, zero.y, zero.z};
-			two = {one.x + 1, one.y + 1, one.z};
-			three1 = {one.x, one.y + 1, one.z};
-			three2 = {one.x + 1, one.y, one.z};
+			one = {zero.x, zero.y, zero.z, 0, 0};
+			two = {one.x + 1, one.y + 1, one.z, 0, 0};
+			three1 = {one.x, one.y + 1, one.z, 0, 0};
+			three2 = {one.x + 1, one.y, one.z, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		} else if (blocks[i].GetFace(5)) {
-			one = {zero.x + 1, zero.y + 1, zero.z + 1};
-			two = {one.x - 1, one.y - 1, one.z};
-			three1 = {one.x, one.y - 1, one.z};
-			three2 = {one.x - 1, one.y, one.z};
+			one = {zero.x + 1, zero.y + 1, zero.z + 1, 0, 0};
+			two = {one.x - 1, one.y - 1, one.z, 0, 0};
+			three1 = {one.x, one.y - 1, one.z, 0, 0};
+			three2 = {one.x - 1, one.y, one.z, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		}
 		if (blocks[i].GetFace(1)) {
-			one = {zero.x, zero.y, zero.z};
-			two = {one.x + 1, one.y, one.z + 1};
-			three1 = {one.x, one.y, one.z + 1};
-			three2 = {one.x + 1, one.y, one.z};
+			one = {zero.x, zero.y, zero.z, 0, 0};
+			two = {one.x + 1, one.y, one.z + 1, 0, 0};
+			three1 = {one.x, one.y, one.z + 1, 0, 0};
+			three2 = {one.x + 1, one.y, one.z, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		} else if (blocks[i].GetFace(3)) {
-			one = {zero.x + 1, zero.y + 1, zero.z + 1};
-			two = {one.x - 1, one.y - 1, one.z};
-			three1 = {one.x, one.y, one.z - 1};
-			three2 = {one.x - 1, one.y, one.z};
+			one = {zero.x + 1, zero.y + 1, zero.z + 1, 0, 0};
+			two = {one.x - 1, one.y - 1, one.z, 0, 0};
+			three1 = {one.x, one.y, one.z - 1, 0, 0};
+			three2 = {one.x - 1, one.y, one.z, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		}
 		if (blocks[i].GetFace(2)) {
-			one = {zero.x + 1, zero.y + 1, zero.z + 1};
-			two = {one.x - 1, one.y - 1, one.z};
-			three1 = {one.x, one.y - 1, one.z};
-			three2 = {one.x, one.y, one.z - 1};
+			one = {zero.x + 1, zero.y + 1, zero.z + 1, 0, 0};
+			two = {one.x - 1, one.y - 1, one.z, 0, 0};
+			three1 = {one.x, one.y - 1, one.z, 0, 0};
+			three2 = {one.x, one.y, one.z - 1, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		} else if (blocks[i].GetFace(4)) {
-			one = {zero.x, zero.y, zero.z};
-			two = {one.x, one.y + 1, one.z + 1};
-			three1 = {one.x, one.y + 1, one.z};
-			three2 = {one.x, one.y, one.z + 1};
+			one = {zero.x, zero.y, zero.z, 0, 0};
+			two = {one.x, one.y + 1, one.z + 1, 0, 0};
+			three1 = {one.x, one.y + 1, one.z, 0, 0};
+			three2 = {one.x, one.y, one.z + 1, 0, 0};
 			texture.setUV(one, two, three1, three2, blocks[i]);
 		}
+		pushVertex(one, triangles);
+		pushVertex(two, triangles);
+		pushVertex(three1, triangles);
+		pushVertex(three1, triangles);
 	}
 }
 
-void	VertexCreator::setBlocks(std::vector<Voxel> input) {
+void	VertexCreator::setBlocks(std::vector<Voxel> &input) {
 	this->blocks = input;
 }
 
@@ -93,3 +98,6 @@ void	VertexCreator::directionCheck(float x, float y, float z) {
 
 //}
 
+std::vector<float>	VertexCreator::getVertex() {
+	return this->triangles;
+}

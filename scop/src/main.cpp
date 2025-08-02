@@ -17,7 +17,7 @@ int main (int ac, char** av) {
 		shaderProgram = loadShaders("shader/vertex.glsl", "shader/fragment.glsl");
 		render = new rendering(shaderProgram);
 
-		if (!render->loadTexture("myLittleShit.bmp")) {
+		if (!render->loadTexture("nyan.bmp")) {
 			std::cout << "Warning: Could not load texture, using colors only" << std::endl;
 		}
 		
