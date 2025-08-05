@@ -14,12 +14,14 @@ private:
 	GLFWwindow*			window;
 	GLuint				shaderProgram;
 	float				lastX, lastY;
-	float				rotX, rotY;
+	float				rotX, rotZ, rotY, saveX, saveZ;
 	bool				firstMouse;
 	int					texWidth, texHeight;
 	int					width, height;
 	Pos					camera;
 
+	float	speed;
+	bool	mouseButtonPressed = false;
 public:
 	Rendering(int width, int height);
 	~Rendering();

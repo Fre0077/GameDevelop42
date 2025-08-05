@@ -28,6 +28,11 @@
 
 # include "stb_image.h"
 
+# define Ytex 0.03125f
+# define Xtex 0.015625f
+
+#define P 3.14159265358979323846f
+
 struct Vertex {
 	float x, y, z, u, v;
 };

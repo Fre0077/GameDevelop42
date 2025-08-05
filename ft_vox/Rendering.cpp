@@ -3,6 +3,13 @@
 Rendering::Rendering(int width, int height) {
 	this->width = width;
 	this->height = height;
+	this->lastX = 400.0f;
+	this->lastY = 300.0f;
+	this->rotX = 0.0f;
+	this->rotY = 0.0f;
+	this->speed = 0.05f;
+	this->mouseButtonPressed = false;
+	this->firstMouse = true;
 	this->camera = {0, 0, 10};
 }
 
@@ -59,40 +66,34 @@ void	Rendering::Init(std::string title) {
 
 void	Rendering::Loop() {
 	while (!glfwWindowShouldClose(window)) {
-		this->processInput();
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(shaderProgram);
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 
 		mat4 view;
 		view.view(-camera.x, -camera.y, -camera.z);
-	
+
 		mat4 projection;
 		projection.project(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-	
-		
-		mat4 rotY, rotX;
-		rotY.world("y", -this->rotY);
-		rotX.world("x", -this->rotX);
-		mat4 model = rotY.multiply(rotX);
-	
+
+		mat4 RotY, RotX, RotZ;
+		RotY.world("y", this->rotY);
+		RotX.world("x", -this->rotX);
+		RotZ.world("z", this->rotZ);
+		mat4 model = RotY.multiply(RotX);
+		model = model.multiply(RotZ);
+
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, view.data);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.data);
 		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
-	
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, triangles.size() * sizeof(float), triangles.data());
+
+		glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
 		int vertexCount = triangles.size() / 5;
-		
+
 		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-		
 		glfwSwapBuffers(window);
+
 		glfwPollEvents();
+		this->processInput();
 	}
 }
 
@@ -134,6 +135,12 @@ void Rendering::loadTexture(const std::string& texturePath) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     stbi_image_free(data);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 }
 
 std::string	readShaderFile(const std::string& filepath) {
@@ -196,9 +203,6 @@ void	Rendering::loadShaders(const char* vertexPath, const char* fragmentPath) {
 //===============================
 
 void Rendering::setupMouseControl() {
-	// Nasconde il cursore e lo blocca nella finestra
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
 	// Salva il this per accedere dentro le lambda
 	glfwSetWindowUserPointer(window, this);
 
@@ -207,14 +211,27 @@ void Rendering::setupMouseControl() {
 		Rendering* r = static_cast<Rendering*>(glfwGetWindowUserPointer(win));
 		if (r) r->mouse_callback(xpos, ypos);
 	});
+
+	glfwSetMouseButtonCallback(window, [](GLFWwindow* win, int button, int action, int mods) {
+		(void)mods;
+		Rendering* r = static_cast<Rendering*>(glfwGetWindowUserPointer(win));
+		if (!r) return;
+
+		if (button == GLFW_MOUSE_BUTTON_LEFT) {
+			if (action == GLFW_PRESS) {
+				r->firstMouse = true;
+				r->mouseButtonPressed = true;
+			}
+			else if (action == GLFW_RELEASE)
+				r->mouseButtonPressed = false;
+		}
+	});
 }
 
 void Rendering::processInput() {
 	// Chiudi finestra con ESC
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
-
-	const float speed = 0.1f;
 
 	// Vettore direzione frontale (forward)
 	float frontX = cos(rotX) * sin(rotY);
@@ -228,30 +245,30 @@ void Rendering::processInput() {
 	frontZ /= length;
 
 	// Vettore laterale (right)
-	float rightX = sin(rotY - 3.14f / 2.0f);
-	float rightZ = cos(rotY - 3.14f / 2.0f);
+	float rightX = sin(rotY - P / 2.0f);
+	float rightZ = cos(rotY - P / 2.0f);
 	length = sqrt(rightX * rightX + rightZ * rightZ);
 	rightX /= length;
 	rightZ /= length;
 
 	// Movimento
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.x += frontX * speed;
-		camera.y += frontY * speed;
-		camera.z += frontZ * speed;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
 		camera.x -= frontX * speed;
-		camera.y -= frontY * speed;
+		camera.y += frontY * speed;
 		camera.z -= frontZ * speed;
 	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.x -= rightX * speed;
-		camera.z -= rightZ * speed;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		camera.x += frontX * speed;
+		camera.y -= frontY * speed;
+		camera.z += frontZ * speed;
 	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 		camera.x += rightX * speed;
 		camera.z += rightZ * speed;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		camera.x -= rightX * speed;
+		camera.z -= rightZ * speed;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
 		camera.y += speed;
@@ -259,34 +276,93 @@ void Rendering::processInput() {
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
 		camera.y -= speed;
 	}
+	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+		if (speed == 0.05f)
+			speed = 0.5f;
+		else
+			speed = 0.05f;
+	}
 }
 
-void Rendering::mouse_callback(double xpos, double ypos) {
-	(void)window;
+void	ponderer(float &input) {
+	if (input > 6.2832f)
+		input -= 6.2832f;
+	if (input < 0)
+		input += 6.2832f;
+}
 
-	if (firstMouse) {
-		lastX = xpos;
-		lastY = ypos;
-		firstMouse = false;
+float	muchZ(float input) {
+	int	temp = input / 1.5708f;
+	float rest = fmod(input, 1.5708f);
+	switch (temp)
+	{
+	case 0:
+		return (rest / 1.5708f) * -1;
+	case 1:
+		return ((1.5708f - rest) / 1.5708f) * -1;
+	case 2:
+		return (rest / 1.5708f);
+	case 3:
+		return ((1.5708f - rest) / 1.5708f);
 	}
+	return 0;
+}
 
-	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // invertito: più in alto = più positivo
+float	muchX(float input) {
+	int	temp = input / 1.5708f;
+	float rest = fmod(input, 1.5708f);
+	switch (temp)
+	{
+	case 0:
+		return ((1.5708f - rest) / 1.5708f) * -1;
+	case 1:
+		return (rest / 1.5708f);
+	case 2:
+		return ((1.5708f - rest) / 1.5708f);
+	case 3:
+		return (rest / 1.5708f) * -1;
+	};
+	return 0;
+}
 
+void	Rendering::mouse_callback(double xpos, double ypos) {
+    if (!mouseButtonPressed)
+        return;
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+        return;
+    }
+
+	float	yoffset = lastX - xpos;
+	float	xoffset = lastY - ypos;
 	lastX = xpos;
 	lastY = ypos;
 
-	float sensitivity = 0.002f;
+	float	sensitivity = 0.01f;
 	xoffset *= sensitivity;
 	yoffset *= sensitivity;
 
-	rotY += xoffset;
-	rotX += yoffset;
+	rotY += yoffset;
+	//ponderer(rotY);
+	saveX += xoffset;
+	//ponderer(saveX);
+	saveZ += xoffset;
+	//ponderer(saveZ);
 
-	// Clamp della rotazione verticale (pitch)
-	const float pitchLimit = 1.55f; // circa 89° in radianti
-	if (rotX > pitchLimit)
-		rotX = pitchLimit;
-	if (rotX < -pitchLimit)
-		rotX = -pitchLimit;
+	if (saveX > 1.5f)
+		saveX = 1.5f;
+	if (saveX < -1.5f)
+		saveX = -1.5f;
+
+	if (saveZ > 1.5f)
+		saveZ = 1.5f;
+	if (saveZ < -1.5f)
+		saveZ = -1.5f;
+
+	rotX = saveX * muchX(fmod(rotY, 6.2832f));
+	rotZ = saveZ * muchZ(fmod(rotY, 6.2832f));
+	std::cout << "x:" << muchX(rotY) << "   z:" << muchZ(rotY) << std::endl;
 }

@@ -8,7 +8,7 @@ public:
 	Texture();
 	~Texture();
 
-	void	setUV(Vertex &one, Vertex &two, Vertex &three1, Vertex &three2, Voxel &block);
+	void	setUV(Vertex &one, Vertex &two, Vertex &three1, Vertex &three2, Voxel &block, int face);
 	void	cooclestone(Voxel &block);
 	void	stone(Voxel &block);
 };
