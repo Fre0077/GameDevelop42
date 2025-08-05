@@ -77,8 +77,8 @@ void	Rendering::Loop() {
 
 		mat4 RotY, RotX, RotZ;
 		RotY.world("y", this->rotY);
-		RotX.world("x", -this->rotX);
-		RotZ.world("z", this->rotZ);
+		RotX.world("x", this->rotX);
+		RotZ.world("z", -this->rotZ);
 		mat4 model = RotY.multiply(RotX);
 		model = model.multiply(RotZ);
 
@@ -284,45 +284,88 @@ void Rendering::processInput() {
 	}
 }
 
-void	ponderer(float &input) {
-	if (input > 6.2832f)
-		input -= 6.2832f;
+void	positive(float &input) {
 	if (input < 0)
-		input += 6.2832f;
+		input *= -1;
 }
 
 float	muchZ(float input) {
+	input = fmod(input, 6.2832f);
 	int	temp = input / 1.5708f;
 	float rest = fmod(input, 1.5708f);
+	positive(rest);
+	float result;
+
 	switch (temp)
 	{
+	case -3:
+		result = ((1.5708f - rest) / 1.5708f);
+		break;
+	case -2:
+		result = (rest / 1.5708f);
+		break;
+	case -1:
+		result = ((1.5708f - rest) / 1.5708f) * -1;
+		break;
 	case 0:
-		return (rest / 1.5708f) * -1;
+		if (input < 0)
+			result = (rest / 1.5708f) * -1;
+		else
+			result = (rest / 1.5708f);
+		break;
 	case 1:
-		return ((1.5708f - rest) / 1.5708f) * -1;
+		result = ((1.5708f - rest) / 1.5708f);
+		break;
 	case 2:
-		return (rest / 1.5708f);
+		result = (rest / 1.5708f) * -1;
+		break;
 	case 3:
-		return ((1.5708f - rest) / 1.5708f);
+		result = ((1.5708f - rest) / 1.5708f) * -1;
+		break;
+	default:
+		result = 0;
+		break;
 	}
-	return 0;
+	std::cout << "Z | " << temp  << " | result: " << result << std::endl;
+	return result;
 }
 
 float	muchX(float input) {
+	input = fmod(input, 6.2832f);
 	int	temp = input / 1.5708f;
 	float rest = fmod(input, 1.5708f);
+	positive(rest);
+	float result;
+
 	switch (temp)
 	{
+	case -3:
+		result = (rest / 1.5708f);
+		break;
+	case -2:
+		result = ((1.5708f - rest) / 1.5708f) * -1;
+		break;
+	case -1:
+		result = (rest / 1.5708f) * -1;
+		break;
 	case 0:
-		return ((1.5708f - rest) / 1.5708f) * -1;
+		result = ((1.5708f - rest) / 1.5708f);
+		break;
 	case 1:
-		return (rest / 1.5708f);
+		result = (rest / 1.5708f) * -1;
+		break;
 	case 2:
-		return ((1.5708f - rest) / 1.5708f);
+		result = ((1.5708f - rest) / 1.5708f) * -1;
+		break;
 	case 3:
-		return (rest / 1.5708f) * -1;
-	};
-	return 0;
+		result = (rest / 1.5708f);
+		break;
+	default:
+		result = 0;
+		break;
+	}
+	std::cout << "X | " << temp  << " | result: " << result << std::endl;
+	return result;
 }
 
 void	Rendering::mouse_callback(double xpos, double ypos) {
@@ -346,11 +389,8 @@ void	Rendering::mouse_callback(double xpos, double ypos) {
 	yoffset *= sensitivity;
 
 	rotY += yoffset;
-	//ponderer(rotY);
 	saveX += xoffset;
-	//ponderer(saveX);
 	saveZ += xoffset;
-	//ponderer(saveZ);
 
 	if (saveX > 1.5f)
 		saveX = 1.5f;
@@ -362,7 +402,6 @@ void	Rendering::mouse_callback(double xpos, double ypos) {
 	if (saveZ < -1.5f)
 		saveZ = -1.5f;
 
-	rotX = saveX * muchX(fmod(rotY, 6.2832f));
-	rotZ = saveZ * muchZ(fmod(rotY, 6.2832f));
-	std::cout << "x:" << muchX(rotY) << "   z:" << muchZ(rotY) << std::endl;
+	rotX = saveX * muchX(rotY);
+	rotZ = saveZ * muchZ(rotY);
 }
