@@ -106,13 +106,13 @@ void	Rendering::setTriangles(std::vector<float>	input) {
 //===============================
 
 void Rendering::loadTexture(const std::string& texturePath) {
-	stbi_set_flip_vertically_on_load(true); // Perché OpenGL legge dal basso
+	stbi_set_flip_vertically_on_load(true);
 
 	int nrChannels;
 	unsigned char* data = stbi_load(texturePath.c_str(), &texWidth, &texHeight, &nrChannels, 0);
 	if (!data) {
 		std::cerr << "Failed to load texture: " << texturePath  << "\n" << "Reason: " << stbi_failure_reason() << std::endl;
-		return;
+		throw textureError();
 	}
 
     GLenum format = GL_RGB;
@@ -123,7 +123,7 @@ void Rendering::loadTexture(const std::string& texturePath) {
     else if (nrChannels == 4)
         format = GL_RGBA;
 
-    glGenTextures(1, &texture); // Assicurati di generare la texture una sola volta
+    glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -146,7 +146,7 @@ void Rendering::loadTexture(const std::string& texturePath) {
 std::string	readShaderFile(const std::string& filepath) {
 	std::ifstream file(filepath);
 	if (!file)
-		throw std::runtime_error("Cannot open shader file: " + filepath);
+		throw Rendering::shaderOpening();
 	
 	std::stringstream buffer;
 	buffer << file.rdbuf();
@@ -165,7 +165,7 @@ GLuint	compileShader(GLenum type, const std::string& source) {
 		char infoLog[512];
 		glGetShaderInfoLog(shader, 512, nullptr, infoLog);
 		std::string shaderType = (type == GL_VERTEX_SHADER) ? "VERTEX" : "FRAGMENT";
-		throw std::runtime_error("Shader compilation failed (" + shaderType + "): " + infoLog);
+		throw Rendering::compileShaders();
 	}
 
 	return shader;
@@ -188,7 +188,7 @@ void	Rendering::loadShaders(const char* vertexPath, const char* fragmentPath) {
 	if (!success) {
 		char infoLog[512];
 		glGetProgramInfoLog(program, 512, nullptr, infoLog);
-		throw std::runtime_error("Shader program linking failed: " + std::string(infoLog));
+		throw linkShader();
 	}
 
 	glDeleteShader(vertexShader);
@@ -203,10 +203,8 @@ void	Rendering::loadShaders(const char* vertexPath, const char* fragmentPath) {
 //===============================
 
 void Rendering::setupMouseControl() {
-	// Salva il this per accedere dentro le lambda
 	glfwSetWindowUserPointer(window, this);
 
-	// Callback movimento mouse
 	glfwSetCursorPosCallback(window, [](GLFWwindow* win, double xpos, double ypos) {
 		Rendering* r = static_cast<Rendering*>(glfwGetWindowUserPointer(win));
 		if (r) r->mouse_callback(xpos, ypos);
@@ -229,29 +227,24 @@ void Rendering::setupMouseControl() {
 }
 
 void Rendering::processInput() {
-	// Chiudi finestra con ESC
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	// Vettore direzione frontale (forward)
 	float frontX = cos(rotX) * sin(rotY);
 	float frontY = sin(rotX);
 	float frontZ = cos(rotX) * cos(rotY);
 
-	// Normalizza
 	float length = sqrt(frontX * frontX + frontY * frontY + frontZ * frontZ);
 	frontX /= length;
 	frontY /= length;
 	frontZ /= length;
 
-	// Vettore laterale (right)
 	float rightX = sin(rotY - P / 2.0f);
 	float rightZ = cos(rotY - P / 2.0f);
 	length = sqrt(rightX * rightX + rightZ * rightZ);
 	rightX /= length;
 	rightZ /= length;
 
-	// Movimento
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
 		camera.x -= frontX * speed;
 		camera.y += frontY * speed;
@@ -326,7 +319,6 @@ float	muchZ(float input) {
 		result = 0;
 		break;
 	}
-	std::cout << "Z | " << temp  << " | result: " << result << std::endl;
 	return result;
 }
 
@@ -364,7 +356,6 @@ float	muchX(float input) {
 		result = 0;
 		break;
 	}
-	std::cout << "X | " << temp  << " | result: " << result << std::endl;
 	return result;
 }
 

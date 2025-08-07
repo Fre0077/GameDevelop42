@@ -2,8 +2,8 @@
 
 # include "headers/inclusion.h"
 # include "headers/stb_image.h"
-# include "utils/mat4.hpp"
 
+# include "utils/mat4.hpp"
 class mat4;
 
 class Rendering {
@@ -13,15 +13,15 @@ private:
 	unsigned int		texture;
 	GLFWwindow*			window;
 	GLuint				shaderProgram;
-	float				lastX, lastY;
 	float				rotX, rotZ, rotY, saveX, saveZ;
+	float				lastX, lastY;
+	float				speed;
+	bool				mouseButtonPressed = false;
 	bool				firstMouse;
 	int					texWidth, texHeight;
 	int					width, height;
 	Pos					camera;
 
-	float	speed;
-	bool	mouseButtonPressed = false;
 public:
 	Rendering(int width, int height);
 	~Rendering();
@@ -55,6 +55,34 @@ public:
 	public:
 	const char* what() const noexcept override {
 			return "Rendering: couldn't initialize GLEW";
+		}
+	};
+
+	class textureError : public std::exception {
+	public:
+	const char* what() const noexcept override {
+			return "Rendering: couldn't load the texture";
+		}
+	};
+
+	class shaderOpening : public std::exception {
+	public:
+	const char* what() const noexcept override {
+			return "Rendering: couldn't open file shader";
+		}
+	};
+
+	class compileShaders : public std::exception {
+	public:
+	const char* what() const noexcept override {
+			return "Rendering: couldn't compile the sahder file";
+		}
+	};
+
+	class linkShader : public std::exception {
+	public:
+	const char* what() const noexcept override {
+			return "Rendering: couldn't link the shaders program";
 		}
 	};
 };

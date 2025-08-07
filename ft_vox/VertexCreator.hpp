@@ -16,10 +16,9 @@ public:
 	~VertexCreator();
 
 	std::vector<float>	getVertex();
-	void				directionCheck(float x, float y, float z);
+	void				directionCheck(float X, float Y, float Z);
 	void				setBlocks(std::vector<Voxel> &input);
 	void				calculateTriangle();
-	void				airCheck();
 	//void				faceCheck();
 	//void				fovCheck();
 

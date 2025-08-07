@@ -18,15 +18,15 @@ WorldGenerator::~WorldGenerator() {}
 
 std::vector<Voxel>	WorldGenerator::Creation(long x, long y) {
 	std::vector<float>	noisy = perlinNoise(x - (x % 16), y - (y % 16));
-	std::vector<Voxel>	terrain;
+	std::vector<Voxel>	chunck(CHUNCK);
 
-	for (int i = 15; i >= 0; i--)
-		for (int j = 0; j < 16; j++)
-			Voxellator(noisy[((15 - i) * 16) + j], j, i, terrain);
-	return terrain;
+	for (int X = 15; X >= 0; X--)
+		for (int Z = 0; Z < 16; Z++)
+			Voxellator(noisy[((15 - X) * 16) + Z], Z, X, chunck);
+	return chunck;
 }
 
-void	WorldGenerator::Voxellator(float point, float x, float y, std::vector<Voxel> &blocks) {
+void	WorldGenerator::Voxellator(float point, int x, int z, std::vector<Voxel> &blocks) {
 	float				limit;
 
 	if (point < -1.0f) point = -1.0f;
@@ -44,12 +44,10 @@ void	WorldGenerator::Voxellator(float point, float x, float y, std::vector<Voxel
 	} else
 		limit = 128.0f;
 
-	for (int i = 0; i < 256; i++) {
-		Voxel	block(x, y, i);
-		if (i >= limit)
-			block.SetTrasparence();
-		texture.stone(block);
-		blocks.push_back(block);
+	for (int y = 0; y < 256; y++) {
+		if (y >= limit)
+			blocks[index(x, y, z)].SetTrasparence();
+		texture.stone(blocks[index(x, y, z)]);
 	}
 }
 

@@ -22,7 +22,7 @@ public:
 	~WorldGenerator();
 
 	std::vector<Voxel>	Creation(long x, long y);
-	void				Voxellator(float point, float x, float y, std::vector<Voxel> &blocks);
+	void				Voxellator(float point, int x, int z, std::vector<Voxel> &blocks);
 	
 	std::vector<Vector>	randomVectors(long x, long y);
 	std::vector<float>	perlinNoise(long x, long y);

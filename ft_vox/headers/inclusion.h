@@ -30,8 +30,8 @@
 
 # define Ytex 0.03125f
 # define Xtex 0.015625f
-
-#define P 3.14159265358979323846f
+# define CHUNCK 65536
+# define P 3.14159265358979323846f
 
 struct Vertex {
 	float x, y, z, u, v;
@@ -48,3 +48,5 @@ struct tex {
 void	pushVertex(Vertex &ver, std::vector<float> &vec);
 void	printVecF(const std::vector<float>& vec);
 void	printVec(const std::vector<float>& vec);
+bool	cicle(float &x, float &y, float &z);
+int		index(int x, int y, int z);

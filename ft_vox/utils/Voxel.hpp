@@ -8,10 +8,9 @@ class Voxel {
 private:
 	EightBool	vis;
 	uint8_t		block;
-	Pos			voxel;
 public:
 	tex texture[6];
-	Voxel(float x, float y, float z);
+	Voxel();
 	~Voxel();
 
 	void	SetFace(uint8_t n);
@@ -19,7 +18,6 @@ public:
 
 	uint8_t	GetFace(uint8_t n);
 	uint8_t	GetTrasparence();
-	Pos		GetVoxel();
 };
 
 std::ostream& operator<<(std::ostream& out, Voxel &rhs);

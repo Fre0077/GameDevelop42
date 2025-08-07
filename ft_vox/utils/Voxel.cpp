@@ -1,9 +1,6 @@
 #include "Voxel.hpp"
 
-Voxel::Voxel(float x, float y, float z) {
-	voxel.x = x;
-	voxel.y = y;
-	voxel.z = z;
+Voxel::Voxel() {
 	this->texture[0] = {0, 0};
 	this->texture[1] = {0, 0};
 	this->texture[2] = {0, 0};
@@ -30,10 +27,6 @@ uint8_t	Voxel::GetTrasparence() {
 
 uint8_t	Voxel::GetFace(uint8_t n) {
 	return vis.GetBool(n);
-}
-
-Pos	Voxel::GetVoxel() {
-	return voxel;
 }
 
 std::ostream& operator<<(std::ostream& out, Voxel &rhs)

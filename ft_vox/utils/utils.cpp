@@ -31,3 +31,22 @@ void	pushVertex(Vertex &ver, std::vector<float> &vec) {
 	vec.push_back(ver.u);
 	vec.push_back(ver.v);
 }
+
+int	index(int x, int y, int z) {
+	return x * y * z;
+}
+
+bool cicle(float &x, float &y, float &z) {
+	y++;
+	if (y >= 256) {
+		y = 0;
+		x++;
+		if (x >= 16) {
+			x = 0;
+			z++;
+			if (z >= 16)
+				return false;
+		}
+	}
+	return true;
+}
