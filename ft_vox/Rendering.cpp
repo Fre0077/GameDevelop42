@@ -20,7 +20,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-void	Rendering::Init(std::string title) {
+GLFWwindow*	Rendering::Init(std::string title) {
 	if (!glfwInit()) {
 		std::cerr << "Errore: impossibile inizializzare GLFW\n";
 		throw InitProblem();
@@ -62,39 +62,38 @@ void	Rendering::Init(std::string title) {
 
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	return  window;
 }
 
 void	Rendering::Loop() {
-	while (!glfwWindowShouldClose(window)) {
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		mat4 view;
-		view.view(-camera.x, -camera.y, -camera.z);
+	mat4 view;
+	view.view(-camera.x, -camera.y, -camera.z);
 
-		mat4 projection;
-		projection.project(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+	mat4 projection;
+	projection.project(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
 
-		mat4 RotY, RotX, RotZ;
-		RotY.world("y", this->rotY);
-		RotX.world("x", this->rotX);
-		RotZ.world("z", -this->rotZ);
-		mat4 model = RotY.multiply(RotX);
-		model = model.multiply(RotZ);
+	mat4 RotY, RotX, RotZ;
+	RotY.world("y", this->rotY);
+	RotX.world("x", this->rotX);
+	RotZ.world("z", -this->rotZ);
+	mat4 model = RotY.multiply(RotX);
+	model = model.multiply(RotZ);
 
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, view.data);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.data);
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "view"), 1, GL_FALSE, view.data);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "projection"), 1, GL_FALSE, projection.data);
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, model.data);
 
-		glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
-		int vertexCount = triangles.size() / 5;
+	glBufferData(GL_ARRAY_BUFFER, triangles.size() * sizeof(float), triangles.data(), GL_STATIC_DRAW);
+	int vertexCount = triangles.size() / 5;
 
-		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-		glfwSwapBuffers(window);
+	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	glfwSwapBuffers(window);
 
-		glfwPollEvents();
-		this->processInput();
-	}
+	glfwPollEvents();
+	this->processInput();
 }
 
 void	Rendering::setTriangles(std::vector<float>	input) {

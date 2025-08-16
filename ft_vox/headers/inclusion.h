@@ -37,6 +37,10 @@ struct Vertex {
 	float x, y, z, u, v;
 };
 
+struct Face {
+	Vertex a, b, c, d;
+};
+
 struct Pos {
 	float x, y, z;
 };

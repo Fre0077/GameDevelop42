@@ -7,17 +7,18 @@ class Voxel;
 
 class VertexCreator {
 private:
-	std::vector<Voxel>	blocks;
-	std::vector<float>	triangles;
-	Texture				texture;
+	std::vector<std::vector<float>>	faces;
+	std::vector<float>				triangles;
+	std::vector<Voxel>				&blocks;
+	Texture							texture;
 
 public:
 	VertexCreator();
 	~VertexCreator();
 
 	std::vector<float>	getVertex();
-	void				directionCheck(float X, float Y, float Z);
 	void				setBlocks(std::vector<Voxel> &input);
+	void				directionCheck(Pos input);
 	void				calculateTriangle();
 	//void				faceCheck();
 	//void				fovCheck();

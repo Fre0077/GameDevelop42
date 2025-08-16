@@ -5,7 +5,6 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++23
 LIBS = -lglfw -lGL -lGLEW -lm
 
 SOURCES =	./WorldGenerator.cpp \
-			./VertexCreator.cpp \
 			./DataManager.cpp \
 			./Rendering.cpp \
 			./Texture.cpp \

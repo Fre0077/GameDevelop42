@@ -27,7 +27,7 @@ std::vector<Voxel>	WorldGenerator::Creation(long x, long y) {
 }
 
 void	WorldGenerator::Voxellator(float point, int x, int z, std::vector<Voxel> &blocks) {
-	float				limit;
+	float	limit;
 
 	if (point < -1.0f) point = -1.0f;
 	if (point >  1.0f) point =  1.0f;
@@ -44,10 +44,13 @@ void	WorldGenerator::Voxellator(float point, int x, int z, std::vector<Voxel> &b
 	} else
 		limit = 128.0f;
 
+	int i;
 	for (int y = 0; y < 256; y++) {
+		i = index(x, y, z);
 		if (y >= limit)
-			blocks[index(x, y, z)].SetTrasparence();
-		texture.stone(blocks[index(x, y, z)]);
+			blocks[i].SetTrasparence();
+		texture.stone(blocks[i]);
+		blocks[i].calculateTriangle(x, y, z );
 	}
 }
 

@@ -13,6 +13,8 @@ private:
 	unsigned int		texture;
 	GLFWwindow*			window;
 	GLuint				shaderProgram;
+	double				lastFrameTime;
+	double				deltaTime;
 	float				rotX, rotZ, rotY, saveX, saveZ;
 	float				lastX, lastY;
 	float				speed;
@@ -20,15 +22,15 @@ private:
 	bool				firstMouse;
 	int					texWidth, texHeight;
 	int					width, height;
-	Pos					camera;
-
+	
 public:
+	Pos					camera;
 	Rendering(int width, int height);
 	~Rendering();
 
-	void	Init(std::string title);
-	void	Loop();
-	void	setTriangles(std::vector<float>	input);
+	GLFWwindow*	Init(std::string title);
+	void		Loop();
+	void		setTriangles(std::vector<float>	input);
 
 	void	loadShaders(const char* vertexPath, const char* fragmentPath);
 	void	loadTexture(const std::string& texturePath);

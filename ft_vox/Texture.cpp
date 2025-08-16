@@ -4,17 +4,6 @@ Texture::Texture() {}
 
 Texture::~Texture() {}
 
-void	Texture::setUV(Vertex &one, Vertex &two, Vertex &three1, Vertex &three2, Voxel &block, int face) {
-	one.u = block.texture[face].u * Xtex;
-	one.v = block.texture[face].v * Ytex;
-	two.u = (block.texture[face].u + 1) * Xtex;
-	two.v = (block.texture[face].v + 1) * Ytex;
-	three1.u = (block.texture[face].u + 1) * Xtex;
-	three1.v = block.texture[face].v * Ytex;
-	three2.u = block.texture[face].u * Xtex;
-	three2.v = (block.texture[face].v + 1) * Ytex;
-}
-
 void	Texture::cooclestone(Voxel &block) {
 	block.texture[0] = {13, 14};
 	block.texture[1] = {13, 14};
