@@ -8,6 +8,7 @@ public:
 	Texture();
 	~Texture();
 
+	void	spruce_plank(Voxel &block);
 	void	cooclestone(Voxel &block);
 	void	stone(Voxel &block);
 };

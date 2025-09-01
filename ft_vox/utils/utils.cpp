@@ -10,7 +10,7 @@ void	printVec(const std::vector<float>& vec) {
 
 	for (int i = 0; i < 256; i++) {
 		float val = vec[i];
-		val = (val + 1.0f) / 2.0f;
+		val = (val - 1.0f) / 2.0f;
 		int level = std::min(9, std::max(0, static_cast<int>(val * 9)));
 		std::cout << levels[level] << " ";
 		if (i % 16 == 0)
@@ -33,10 +33,10 @@ void	pushVertex(Vertex &ver, std::vector<float> &vec) {
 }
 
 int	index(int x, int y, int z) {
-	return x * y * z;
+	return (y * 16 * 16) + (z * 16) + x;
 }
 
-bool cicle(float &x, float &y, float &z) {
+bool cicle(int &x, int &y, int &z) {
 	y++;
 	if (y >= 256) {
 		y = 0;

@@ -122,8 +122,8 @@ void	Voxel::calculateTriangle(float x, float y, float z) {
 	face[5].a = one;
 	face[5].b = three1;
 	face[5].c = three2;
-	setUV(5);
 	face[5].d = two;
+	setUV(5);
 }
 
 void	Voxel::SetFace(uint8_t n) {

@@ -52,5 +52,5 @@ struct tex {
 void	pushVertex(Vertex &ver, std::vector<float> &vec);
 void	printVecF(const std::vector<float>& vec);
 void	printVec(const std::vector<float>& vec);
-bool	cicle(float &x, float &y, float &z);
+bool	cicle(int &x, int &y, int &z);
 int		index(int x, int y, int z);

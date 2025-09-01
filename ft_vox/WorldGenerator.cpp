@@ -18,39 +18,42 @@ WorldGenerator::~WorldGenerator() {}
 
 std::vector<Voxel>	WorldGenerator::Creation(long x, long y) {
 	std::vector<float>	noisy = perlinNoise(x - (x % 16), y - (y % 16));
+	//printVec(noisy);
 	std::vector<Voxel>	chunck(CHUNCK);
 
 	for (int X = 15; X >= 0; X--)
 		for (int Z = 0; Z < 16; Z++)
 			Voxellator(noisy[((15 - X) * 16) + Z], Z, X, chunck);
+	
 	return chunck;
 }
 
 void	WorldGenerator::Voxellator(float point, int x, int z, std::vector<Voxel> &blocks) {
-	float	limit;
+	float	limit = point * 80;
+	(void) point;
 
-	if (point < -1.0f) point = -1.0f;
-	if (point >  1.0f) point =  1.0f;
+	//std::cout << point << std::endl;
 
-	if (point >= -0.3f && point <= 0.3f)
-		limit = 128.0f + point * (171.0f / 2.0f);
-	else if (point > 0.3f)
-	{
-		float strength = (point - 0.3f) / 0.7f;
-		limit = 128.0f + 0.3f * (171.0f / 2.0f) + strength * (171.0f / 2.0f) * 2.0f;
-	} else if (point < -0.3f) {
-		float strength = (-0.3f - point) / 0.7f;
-		limit = 128.0f + (-0.3f * (171.0f / 2.0f)) - strength * (171.0f / 2.0f);
-	} else
-		limit = 128.0f;
+	//if (point >= 0.7f && point <= 1.3f)
+	//	limit = 128.0f + point * (171.0f / 2.0f);
+	//else if (point > 1.3f)
+	//{
+	//	float strength = (point - 0.3f) / 0.7f;
+	//	limit = 128.0f + 0.3f * (171.0f / 2.0f) + strength * (171.0f / 2.0f) * 2.0f;
+	//} else if (point < 0.7f) {
+	//	float strength = (-0.3f - point) / 0.7f;
+	//	limit = 128.0f + (-0.3f * (171.0f / 2.0f)) - strength * (171.0f / 2.0f);
+	//} else
+	//	limit = 128.0f;
 
+	//std::cout << limit << std::endl;
 	int i;
 	for (int y = 0; y < 256; y++) {
 		i = index(x, y, z);
 		if (y >= limit)
 			blocks[i].SetTrasparence();
-		texture.stone(blocks[i]);
-		blocks[i].calculateTriangle(x, y, z );
+		texture.spruce_plank(blocks[i]);
+		blocks[i].calculateTriangle(x, y, z);
 	}
 }
 
@@ -81,7 +84,7 @@ std::vector<float> WorldGenerator::perlinNoise(long x, long y) {
 
 			float value = this->Midder(ix0, ix1, v);
 
-			ret.push_back(value);
+			ret.push_back(value + 2);
 		}
 	}
 	return ret;

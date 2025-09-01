@@ -65,7 +65,7 @@ GLFWwindow*	Rendering::Init(std::string title) {
 	return  window;
 }
 
-void	Rendering::Loop() {
+void	Rendering::Loop(std::vector<float>	&triangles) {
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -94,10 +94,6 @@ void	Rendering::Loop() {
 
 	glfwPollEvents();
 	this->processInput();
-}
-
-void	Rendering::setTriangles(std::vector<float>	input) {
-	this->triangles = input;
 }
 
 //===============================

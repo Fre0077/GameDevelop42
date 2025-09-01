@@ -21,3 +21,12 @@ void	Texture::stone(Voxel &block) {
 	block.texture[4] = {6, 5};
 	block.texture[5] = {6, 5};
 }
+
+void	Texture::spruce_plank(Voxel &block) {
+	block.texture[0] = {3, 5};
+	block.texture[1] = {3, 5};
+	block.texture[2] = {3, 5};
+	block.texture[3] = {3, 5};
+	block.texture[4] = {3, 5};
+	block.texture[5] = {3, 5};
+}

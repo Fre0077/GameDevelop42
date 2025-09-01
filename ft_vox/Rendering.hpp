@@ -8,7 +8,6 @@ class mat4;
 
 class Rendering {
 private:
-	std::vector<float>	triangles;
 	unsigned int		VAO, VBO;
 	unsigned int		texture;
 	GLFWwindow*			window;
@@ -29,8 +28,7 @@ public:
 	~Rendering();
 
 	GLFWwindow*	Init(std::string title);
-	void		Loop();
-	void		setTriangles(std::vector<float>	input);
+	void		Loop(std::vector<float>	&triangles);
 
 	void	loadShaders(const char* vertexPath, const char* fragmentPath);
 	void	loadTexture(const std::string& texturePath);
