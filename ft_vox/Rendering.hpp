@@ -8,11 +8,11 @@ class mat4;
 
 class Rendering {
 private:
+	std::chrono::high_resolution_clock::time_point	lastFrameTime;
 	unsigned int		VAO, VBO;
 	unsigned int		texture;
 	GLFWwindow*			window;
 	GLuint				shaderProgram;
-	double				lastFrameTime;
 	double				deltaTime;
 	float				rotX, rotZ, rotY, saveX, saveZ;
 	float				lastX, lastY;

@@ -16,48 +16,52 @@ WorldGenerator::WorldGenerator(std::string seed, std::string worldName) {
 
 WorldGenerator::~WorldGenerator() {}
 
-std::vector<Voxel>	WorldGenerator::Creation(long x, long y) {
-	std::vector<float>	noisy = perlinNoise(x - (x % 16), y - (y % 16));
+std::vector<Voxel>	WorldGenerator::Creation(long x, long z) {
+	std::vector<float>	noisy = perlinNoise(x - (x % 16), z - (z % 16));
 	//printVec(noisy);
 	std::vector<Voxel>	chunck(CHUNCK);
 
 	for (int X = 15; X >= 0; X--)
 		for (int Z = 0; Z < 16; Z++)
-			Voxellator(noisy[((15 - X) * 16) + Z], Z, X, chunck);
+			Voxellator(noisy[((15 - X) * 16) + Z], X, Z, x, z, chunck);
 	
 	return chunck;
 }
 
-void	WorldGenerator::Voxellator(float point, int x, int z, std::vector<Voxel> &blocks) {
-	float	limit = point * 80;
+void	WorldGenerator::Voxellator(float point, int X, int Z, int x, int z, std::vector<Voxel> &blocks) {
+	float	limit;
 	(void) point;
 
 	//std::cout << point << std::endl;
 
-	//if (point >= 0.7f && point <= 1.3f)
-	//	limit = 128.0f + point * (171.0f / 2.0f);
-	//else if (point > 1.3f)
-	//{
-	//	float strength = (point - 0.3f) / 0.7f;
-	//	limit = 128.0f + 0.3f * (171.0f / 2.0f) + strength * (171.0f / 2.0f) * 2.0f;
-	//} else if (point < 0.7f) {
-	//	float strength = (-0.3f - point) / 0.7f;
-	//	limit = 128.0f + (-0.3f * (171.0f / 2.0f)) - strength * (171.0f / 2.0f);
-	//} else
-	//	limit = 128.0f;
+	if (point < 0.5) {
+		double t = point / 0.5;
+		double curved = pow(t, 2.0);
+		limit = (80 + curved * (120 - 80));
+	} 
+	else if (point < 1.5) {
+		double t = (point - 0.5) / 1.0;
+		limit = (120 + t * (136 - 120));
+	} 
+	else {
+		double t = (point - 1.5) / 0.5;
+		double curved = pow(t, 2.0);
+		limit = (136 + curved * (250 - 136));
+	}
 
 	//std::cout << limit << std::endl;
 	int i;
 	for (int y = 0; y < 256; y++) {
-		i = index(x, y, z);
+		i = index(X, y, Z);
 		if (y >= limit)
 			blocks[i].SetTrasparence();
-		texture.spruce_plank(blocks[i]);
-		blocks[i].calculateTriangle(x, y, z);
+		texture.grass(blocks[i]);
+		blocks[i].calculateTriangle(X + z, y, Z + x);
 	}
 }
 
 std::vector<float> WorldGenerator::perlinNoise(long x, long y) {
+	//std::cout << x << ", " << y << std::endl;
 	std::vector<Vector> vectors = randomVectors(x, y);
 	std::vector<float> ret;
 
@@ -84,7 +88,7 @@ std::vector<float> WorldGenerator::perlinNoise(long x, long y) {
 
 			float value = this->Midder(ix0, ix1, v);
 
-			ret.push_back(value + 2);
+			ret.push_back(value + 1);
 		}
 	}
 	return ret;

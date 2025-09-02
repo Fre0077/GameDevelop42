@@ -10,7 +10,8 @@ Rendering::Rendering(int width, int height) {
 	this->speed = 0.05f;
 	this->mouseButtonPressed = false;
 	this->firstMouse = true;
-	this->camera = {0, 0, 10};
+	this->camera = {0, 150, 40};
+	this->lastFrameTime = std::chrono::high_resolution_clock::now();
 }
 
 Rendering::~Rendering() {}
@@ -66,6 +67,11 @@ GLFWwindow*	Rendering::Init(std::string title) {
 }
 
 void	Rendering::Loop(std::vector<float>	&triangles) {
+	auto now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> elapsed = now - lastFrameTime;
+	//std::cout << "  " << elapsed.count() << std::endl;
+	deltaTime = elapsed.count() * 100;
+	lastFrameTime = now;
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -241,28 +247,28 @@ void Rendering::processInput() {
 	rightZ /= length;
 
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-		camera.x -= frontX * speed;
-		camera.y += frontY * speed;
-		camera.z -= frontZ * speed;
+		camera.x -= frontX * speed  * deltaTime;
+		camera.y += frontY * speed  * deltaTime;
+		camera.z -= frontZ * speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-		camera.x += frontX * speed;
-		camera.y -= frontY * speed;
-		camera.z += frontZ * speed;
+		camera.x += frontX * speed  * deltaTime;
+		camera.y -= frontY * speed  * deltaTime;
+		camera.z += frontZ * speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-		camera.x += rightX * speed;
-		camera.z += rightZ * speed;
+		camera.x += rightX * speed  * deltaTime;
+		camera.z += rightZ * speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-		camera.x -= rightX * speed;
-		camera.z -= rightZ * speed;
+		camera.x -= rightX * speed  * deltaTime;
+		camera.z -= rightZ * speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-		camera.y += speed;
+		camera.y += speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-		camera.y -= speed;
+		camera.y -= speed  * deltaTime;
 	}
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
 		if (speed == 0.05f)

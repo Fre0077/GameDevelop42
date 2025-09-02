@@ -3,7 +3,7 @@
 #include "headers/colors.h"
 #include "Rendering.hpp"
 
-std::vector<float> takeTriangol(std::vector<Voxel> &blocks);
+void takeTriangol(std::vector<Voxel> &blocks, std::vector<float> &ret);
 
 int main (int ac, char **av) {
 	(void)av;
@@ -33,8 +33,19 @@ int main (int ac, char **av) {
         //    triangol.push_back(v.v);
         //}
 		
-		std::vector<Voxel> temp = Notch.Creation(0, 0);
-		std::vector<float>	triangol = takeTriangol(temp);
+		std::vector<Voxel> temp1 = Notch.Creation(0, 0);
+		std::vector<Voxel> temp2 = Notch.Creation(16, 0);
+		std::vector<Voxel> temp3 = Notch.Creation(0, 16);
+		std::vector<Voxel> temp4 = Notch.Creation(16, 16);
+		std::vector<Voxel> temp5 = Notch.Creation(32, 16);
+		std::vector<Voxel> temp6 = Notch.Creation(32, 32);
+		std::vector<float>	triangol;
+		takeTriangol(temp1, triangol);
+		takeTriangol(temp2, triangol);
+		takeTriangol(temp3, triangol);
+		takeTriangol(temp4, triangol);
+		takeTriangol(temp5, triangol);
+		takeTriangol(temp6, triangol);
 		
 		while (!glfwWindowShouldClose(window)) {
 			Micol.Loop(triangol);
@@ -44,9 +55,7 @@ int main (int ac, char **av) {
 	}
 }
 
-std::vector<float> takeTriangol(std::vector<Voxel> &blocks) {
-	std::vector<float> ret;
-
+void takeTriangol(std::vector<Voxel> &blocks, std::vector<float> &ret) {
 	int x = 0, y = -1, z = 0;
 	while (cicle(x, y, z)) {
 		Voxel &voxel = blocks[index(x, y, z)];
@@ -61,7 +70,6 @@ std::vector<float> takeTriangol(std::vector<Voxel> &blocks) {
 			ret.push_back(v.v);
 		}
 	}
-	return ret;
 }
 
 //935890145

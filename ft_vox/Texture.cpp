@@ -30,3 +30,12 @@ void	Texture::spruce_plank(Voxel &block) {
 	block.texture[4] = {3, 5};
 	block.texture[5] = {3, 5};
 }
+
+void	Texture::grass(Voxel &block) {
+	block.texture[0] = {25, 23};
+	block.texture[1] = {25, 23};
+	block.texture[2] = {21, 18}; //sotto
+	block.texture[3] = {26, 21}; //sopra
+	block.texture[4] = {25, 23};
+	block.texture[5] = {25, 23};
+}

@@ -11,7 +11,5 @@ public:
 	void	spruce_plank(Voxel &block);
 	void	cooclestone(Voxel &block);
 	void	stone(Voxel &block);
+	void	grass(Voxel &block);
 };
-
-//0 = stone
-//1 = cobblestone
