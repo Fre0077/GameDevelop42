@@ -7,6 +7,7 @@ Voxel::Voxel() {
 	this->texture[3] = {0, 0};
 	this->texture[4] = {0, 0};
 	this->texture[5] = {0, 0};
+	this->block = 0;
 }
 
 Voxel::~Voxel() {}

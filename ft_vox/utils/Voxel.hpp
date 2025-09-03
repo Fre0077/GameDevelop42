@@ -2,15 +2,15 @@
 
 # include "EightBool.hpp"
 
-class EightBool; // 0-5 vis blocco 6 trasparente 7 semi-trasparente
+class EightBool; // 0-5 vis blocco 6 semi-trasparente
 
 class Voxel {
 private:
 	EightBool	vis;
-	uint8_t		block;
 	Face	face[6];
-
+	
 public:
+	uint8_t		block;
 	tex		texture[6];
 	Voxel();
 	~Voxel();

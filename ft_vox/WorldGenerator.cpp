@@ -17,14 +17,28 @@ WorldGenerator::WorldGenerator(std::string seed, std::string worldName) {
 WorldGenerator::~WorldGenerator() {}
 
 std::vector<Voxel>	WorldGenerator::Creation(long x, long z) {
+	std::vector<Voxel>	chunck(CHUNCK);
+	if (this->data.searchChunk(x, z, this->worldName)) {
+		std::vector<int> chunkFile = this->data.getChunk(x, z, this->worldName);
+		for (int i = 0; i < CHUNCK; i++)
+			this->texture.setTexture(chunkFile[i], chunck[i]);
+		int i = 0, j = -1, l = 0, id;
+		while (cicle(i, j, l)) {
+			id = index(i, j, l);
+			if (chunck[id].block != 0) 
+				chunck[id].calculateTriangle(i + z, j, l + x);
+		}
+		return chunck;
+	}
+	std::cout << "craaa" << std::endl;
 	std::vector<float>	noisy = perlinNoise(x - (x % 16), z - (z % 16));
 	//printVec(noisy);
-	std::vector<Voxel>	chunck(CHUNCK);
 
 	for (int X = 15; X >= 0; X--)
 		for (int Z = 0; Z < 16; Z++)
 			Voxellator(noisy[((15 - X) * 16) + Z], X, Z, x, z, chunck);
 	
+	this->data.saveChunk(chunck, x, z, this->worldName);
 	return chunck;
 }
 
@@ -53,10 +67,10 @@ void	WorldGenerator::Voxellator(float point, int X, int Z, int x, int z, std::ve
 	int i;
 	for (int y = 0; y < 256; y++) {
 		i = index(X, y, Z);
-		if (y >= limit)
-			blocks[i].SetTrasparence();
-		texture.grass(blocks[i]);
-		blocks[i].calculateTriangle(X + z, y, Z + x);
+		if (y < limit) {
+			this->texture.grass(blocks[i]);
+			blocks[i].calculateTriangle(X + z, y, Z + x);
+		}
 	}
 }
 

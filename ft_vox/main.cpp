@@ -33,19 +33,26 @@ int main (int ac, char **av) {
         //    triangol.push_back(v.v);
         //}
 		
-		std::vector<Voxel> temp1 = Notch.Creation(0, 0);
-		std::vector<Voxel> temp2 = Notch.Creation(16, 0);
-		std::vector<Voxel> temp3 = Notch.Creation(0, 16);
-		std::vector<Voxel> temp4 = Notch.Creation(16, 16);
-		std::vector<Voxel> temp5 = Notch.Creation(32, 16);
-		std::vector<Voxel> temp6 = Notch.Creation(32, 32);
+		std::vector<Voxel>  temp;
 		std::vector<float>	triangol;
-		takeTriangol(temp1, triangol);
-		takeTriangol(temp2, triangol);
-		takeTriangol(temp3, triangol);
-		takeTriangol(temp4, triangol);
-		takeTriangol(temp5, triangol);
-		takeTriangol(temp6, triangol);
+		temp = Notch.Creation(0, 0);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(16, 0);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(32, 0);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(0, 16);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(16, 16);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(32, 16);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(0, 32);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(16, 32);
+		takeTriangol(temp, triangol);
+		temp = Notch.Creation(32, 32);
+		takeTriangol(temp, triangol);
 		
 		while (!glfwWindowShouldClose(window)) {
 			Micol.Loop(triangol);
