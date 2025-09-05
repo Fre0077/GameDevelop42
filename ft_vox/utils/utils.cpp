@@ -1,36 +1,32 @@
 #include "../headers/inclusion.h"
 
-void printVec(const std::vector<float>& vec) {
+//FUNZIONE ESCLUSIVA: utilizzata per testare il perlin noise in worldgenerator
+void printVec(const std::vector<float> &vec) {
 	if (vec.size() != 256) {
 		std::cerr << "Vector must contain exactly 256 elements (16x16).\n";
 		return;
 	}
 
-	const char* levels = " .:-=+*#%@"; // 10 livelli
+	const char* levels = " .:-=+*#%@";
 
 	for (int i = 0; i < 256; i++) {
 		float val = vec[i];
-
-		// normalizza da [0,2] a [0,1]
 		val = val / 2.0f;
-
-		// calcola livello (0–9)
 		int level = static_cast<int>(val * 9);
-
 		std::cout << levels[level] << " ";
-
-		// newline ogni 16 elementi
 		if ((i + 1) % 16 == 0)
 			std::cout << std::endl;
 	}
 }
 
-void	printVecF(const std::vector<float>& vec) {
+//stampa un vector di float
+void	printVecF(const std::vector<float> &vec) {
 	for (size_t i = 0; i < vec.size(); i++) {
 		std::cout << vec[i] << " ";
 	}
 }
 
+//FUNZIONE ESCLUSIVA: utilizzata nel rendering
 void	pushVertex(Vertex &ver, std::vector<float> &vec) {
 	vec.push_back(ver.x);
 	vec.push_back(ver.y);
@@ -39,10 +35,12 @@ void	pushVertex(Vertex &ver, std::vector<float> &vec) {
 	vec.push_back(ver.v);
 }
 
-int	index(int x, int y, int z) {
+//calcola l'index nel vector corrispondente alle cooridnate date
+int	index(int &x, int &y, int &z) {
 	return (y * 16 * 16) + (z * 16) + x;
 }
 
+//cicla tutti i blocchi di un chunck
 bool cicle(int &x, int &y, int &z) {
 	y++;
 	if (y >= 256) {
@@ -56,4 +54,26 @@ bool cicle(int &x, int &y, int &z) {
 		}
 	}
 	return true;
+}
+
+//restituisce il resto di a % b
+float	rest(float a, int b) {
+	while (a > b)
+		a -= b;
+	return a;
+}
+
+//valore assoluto
+float	Abs(float a) {
+	if (a > 0)
+		return a;
+	return a * -1;
+}
+
+//aumenta il valore a di augment, se è negativo aumenta negativamente e viceversa
+void	augment(int &a, int augment) {
+	if (a > 0)
+		a += augment;
+	else
+		a -= augment;
 }

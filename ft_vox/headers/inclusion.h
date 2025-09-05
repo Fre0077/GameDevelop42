@@ -46,12 +46,22 @@ struct Pos {
 	float x, y, z;
 };
 
+struct posChunck {
+	int	x, z;
+	bool operator!=(const posChunck& other) const {
+        return x != other.x && z != other.z;
+    }
+};
+
 struct tex {
 	uint8_t u, v;
 };
 
+float	rest(float a, int b);
+float	Abs(float a);
 void	pushVertex(Vertex &ver, std::vector<float> &vec);
 void	printVecF(const std::vector<float>& vec);
 void	printVec(const std::vector<float>& vec);
 bool	cicle(int &x, int &y, int &z);
-int		index(int x, int y, int z);
+void	augment(int &a, int augment);
+int		index(int &x, int &y, int &z);

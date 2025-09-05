@@ -8,6 +8,7 @@ SOURCES =	./WorldGenerator.cpp \
 			./DataManager.cpp \
 			./Rendering.cpp \
 			./Texture.cpp \
+			./Player.cpp \
 			./main.cpp \
 			./utils/stb_image_impl.cpp \
 			./utils/EightBool.cpp \

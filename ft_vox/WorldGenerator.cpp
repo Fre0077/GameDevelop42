@@ -16,7 +16,7 @@ WorldGenerator::WorldGenerator(std::string seed, std::string worldName) {
 
 WorldGenerator::~WorldGenerator() {}
 
-std::vector<Voxel>	WorldGenerator::Creation(long x, long z) {
+std::vector<Voxel>	WorldGenerator::Creation(long z, long x) {
 	std::vector<Voxel>	chunck(CHUNCK);
 	if (this->data.searchChunk(x, z, this->worldName)) {
 		std::vector<int> chunkFile = this->data.getChunk(x, z, this->worldName);
@@ -31,7 +31,7 @@ std::vector<Voxel>	WorldGenerator::Creation(long x, long z) {
 		return chunck;
 	}
 	std::cout << "craaa" << std::endl;
-	std::vector<float>	noisy = perlinNoise(x - (x % 16), z - (z % 16));
+	std::vector<float>	noisy = perlinNoise(x, z);
 	//printVec(noisy);
 
 	for (int X = 15; X >= 0; X--)

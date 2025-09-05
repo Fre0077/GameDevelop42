@@ -21,7 +21,7 @@ public:
 	WorldGenerator(std::string seed, std::string worldName);
 	~WorldGenerator();
 
-	std::vector<Voxel>	Creation(long x, long z);
+	std::vector<Voxel>	Creation(long z, long x);
 	void				Voxellator(float point, int X, int Z, int x, int z, std::vector<Voxel> &blocks);
 	
 	std::vector<Vector>	randomVectors(long x, long y);

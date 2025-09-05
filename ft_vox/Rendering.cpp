@@ -10,7 +10,7 @@ Rendering::Rendering(int width, int height) {
 	this->speed = 0.05f;
 	this->mouseButtonPressed = false;
 	this->firstMouse = true;
-	this->camera = {0, 150, 40};
+	this->camera = {8, 150, 8};
 	this->lastFrameTime = std::chrono::high_resolution_clock::now();
 }
 
@@ -21,6 +21,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
+//Inizializza la classe ddi rendering
 GLFWwindow*	Rendering::Init(std::string title) {
 	if (!glfwInit()) {
 		std::cerr << "Errore: impossibile inizializzare GLFW\n";
@@ -66,10 +67,10 @@ GLFWwindow*	Rendering::Init(std::string title) {
 	return  window;
 }
 
+//funzione che stampa i triangoli a schermo
 void	Rendering::Loop(std::vector<float>	&triangles) {
 	auto now = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> elapsed = now - lastFrameTime;
-	//std::cout << "  " << elapsed.count() << std::endl;
 	deltaTime = elapsed.count() * 100;
 	lastFrameTime = now;
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -106,6 +107,7 @@ void	Rendering::Loop(std::vector<float>	&triangles) {
 //= SHADERS AND TEXTURE LOADING =
 //===============================
 
+//caricamento delle texttre da utilizzare
 void Rendering::loadTexture(const std::string& texturePath) {
 	stbi_set_flip_vertically_on_load(true);
 
@@ -144,6 +146,7 @@ void Rendering::loadTexture(const std::string& texturePath) {
 	glUniform1i(glGetUniformLocation(shaderProgram, "ourTexture"), 0);
 }
 
+//letture dei file shaders
 std::string	readShaderFile(const std::string& filepath) {
 	std::ifstream file(filepath);
 	if (!file)
@@ -154,6 +157,7 @@ std::string	readShaderFile(const std::string& filepath) {
 	return buffer.str();
 }
 
+//compilazione dei file shaders
 GLuint	compileShader(GLenum type, const std::string& source) {
 	GLuint shader = glCreateShader(type);
 	const char* src = source.c_str();
@@ -172,6 +176,7 @@ GLuint	compileShader(GLenum type, const std::string& source) {
 	return shader;
 }
 
+//creazione del programma per le shaders
 void	Rendering::loadShaders(const char* vertexPath, const char* fragmentPath) {
 	std::string vertexCode = readShaderFile(vertexPath);
 	std::string fragmentCode = readShaderFile(fragmentPath);
